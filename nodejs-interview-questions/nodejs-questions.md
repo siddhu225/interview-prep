@@ -1,5 +1,4 @@
-Here are **detailed answers** to your **Node.js interview questions** based on the **official Node.js documentation**.
-
+```
 * * * * *
 
 ### **1\. What is Node.js, and how does it work?**
@@ -30,6 +29,33 @@ server.listen(3000, () => {
 
 ```
 
+⚙️ **Single-threaded**
+
+-   JavaScript (in Node.js) runs on **a single thread** --- this means it can only execute **one piece of code at a time**.
+
+-   Unlike languages like Java or C++, which can use multiple threads to handle tasks in parallel, Node.js handles everything on one thread.
+
+* * * * *
+
+### ⚡ **Event-driven**
+
+-   Node.js uses an **event loop** to manage operations.
+
+-   When something happens (like a file finishes reading, or a request comes in), Node.js **emits events**, and corresponding **callbacks** (functions) are triggered.
+
+-   This makes it responsive and efficient for I/O-heavy applications.
+
+* * * * *
+
+### 🔄 **Non-blocking I/O**
+
+-   I/O = Input/Output (e.g., reading files, databases, APIs).
+
+-   In a blocking system, the code waits (gets blocked) until the operation is done.
+
+-   In **non-blocking I/O**, Node.js starts the operation, then **moves on** to the next task. When the I/O completes, the callback is **queued and executed later**.
+
+
 * * * * *
 
 ### **2\. What are the key features of Node.js?**
@@ -40,6 +66,7 @@ Node.js has several **powerful features** that make it a great choice for **s
 
     -   Node.js APIs are **non-blocking**, meaning I/O operations don't pause the execution of other code.
     -   Uses an **event-driven architecture** where actions (like file reads or HTTP requests) trigger events handled by the event loop.
+
 2.  **Single-Threaded with Non-Blocking I/O**
 
     -   Uses a **single-threaded model** that can handle **multiple concurrent requests** without the need for multiple threads.
@@ -170,26 +197,6 @@ myEmitter.emit('dataReceived', 'Hello, Event-Driven Architecture!');
 Received message: Hello, Event-Driven Architecture!
 
 ```
-
-➡ **Explanation:** The event listener is triggered when `emit()` is called, demonstrating how Node.js manages events.
-
-* * * * *
-
-### **Summary**
-
-| **Question** | **Key Takeaways** |
-| --- | --- |
-| **What is Node.js?** | A **server-side runtime** for executing JavaScript outside the browser using **V8**. |
-| **Key Features?** | **Non-blocking I/O, event-driven model, V8 engine, scalability, built-in modules, NPM**. |
-| **Node.js vs Browser JavaScript?** | Node.js runs on **servers**, has **global** instead of `window`, and includes **fs, http modules**. |
-| **Role of V8?** | **Compiles JavaScript to machine code**, provides **JIT compilation**, and manages **memory efficiently**. |
-| **Event-Driven Architecture?** | Uses an **event loop**, handles **I/O operations asynchronously**, and relies on **events and callbacks**. |
-
-* * * * *
-
-Here are **detailed answers** to your **Node.js interview questions**, based on the **official Node.js documentation**.  
-
----
 
 ### **6. What is the difference between CommonJS and ES Modules in Node.js?**  
 
@@ -352,46 +359,11 @@ Node.js supports **multiple ways** to **export and import** modules, depending o
    ```javascript
    import myFunc from './module.mjs';
    myFunc(); // Output: Default Export
-   ```
+   ``` 
 
 ---
 
-### **9. What is the difference between `setImmediate()`, `process.nextTick()`, and `setTimeout()`?**  
-
-| Function            | Execution Timing |
-|---------------------|-----------------|
-| `setImmediate()`    | Executes **after the current event loop cycle is complete**, before any I/O events. |
-| `process.nextTick()` | Executes **before the event loop continues** (highest priority). |
-| `setTimeout(fn, 0)` | Executes **after the event loop cycle**, with a minimum delay of **1ms**. |
-
-✅ **Example:**  
-```javascript
-console.log('Start');
-
-setImmediate(() => console.log('setImmediate'));
-process.nextTick(() => console.log('process.nextTick'));
-setTimeout(() => console.log('setTimeout'), 0);
-
-console.log('End');
-```
-
-**Output:**  
-```
-Start
-End
-process.nextTick
-setTimeout
-setImmediate
-```
-
-📌 **Key Takeaways:**  
-- `process.nextTick()` executes **before anything else**, even before `setTimeout(0)`.  
-- `setTimeout(0)` executes **after the current event loop cycle**.  
-- `setImmediate()` executes **after I/O operations**.  
-
----
-
-### **10. How do you handle command-line arguments in a Node.js application?**  
+### **9. How do you handle command-line arguments in a Node.js application?**  
 
 In Node.js, you can access **command-line arguments** using `process.argv`.  
 
@@ -437,19 +409,7 @@ console.log(argv.name); // If run with `node script.js --name=Alice`
 
 ---
 
-### **Summary**  
-
-| **Question** | **Key Takeaways** |
-|-------------|-----------------|
-| **CommonJS vs ESM?** | CommonJS uses `require()`, ESM uses `import/export`. |
-| **How does `require()` work?** | Resolves, loads, executes, caches the module. |
-| **Ways to export/import?** | `module.exports`, `exports.foo`, `export default`, `export {}`. |
-| **`setImmediate()` vs `nextTick()` vs `setTimeout()`?** | `nextTick()` is highest priority, `setImmediate()` runs after I/O. |
-| **How to handle CLI arguments?** | Use `process.argv` or `yargs`. |
-
----
-
-### What is an error-first callback? ☆☆
+### **10. What is an error-first callback? ☆☆
 
 [](https://gist.github.com/paulfranco/9f88a2879b7b7d88de5d1921aef2093b#q5-what-is-an-error-first-callback-)
 
@@ -463,7 +423,8 @@ fs.readFile(filePath, function(err, data) {
   // use the data object
 });
 ```
-### Could we run an external process with Node.js? ☆☆
+
+### **11. Could we run an external process with Node.js? ☆☆
 
 [](https://gist.github.com/paulfranco/9f88a2879b7b7d88de5d1921aef2093b#q14-could-we-run-an-external-process-with-nodejs-)
 
@@ -475,7 +436,64 @@ Child process module has following three major ways to create child processes --
 -   exec - child_process.exec method runs a command in a shell/console and buffers the output.
 -   fork - The child_process.fork method is a special case of the spawn() to create child processes.
 
-### What is REPL in context of Node? ☆☆☆
+Absolutely! Here are some **real-world use cases** for each method from `child_process` in Node.js:
+
+* * * * *
+
+### 1\. `exec()`
+
+**Use Case:**\
+🔧 *Running short shell commands and parsing their output.*
+
+📌 Example: Getting the current Git branch in a deployment script.
+
+`exec('git rev-parse --abbrev-ref HEAD', (err, stdout) => { if (!err) console.log(`Current branch: ${stdout.trim()}`);
+}); `
+
+* * * * *
+
+### 2\. `spawn()`
+
+**Use Case:**\
+🚀 *Launches a new process with a given command. Useful for handling large outputs. Streaming large data or interacting with long-running processes.*
+
+📌 Example: Converting a video using FFmpeg (huge output).
+
+`const ffmpeg = spawn('ffmpeg', ['-i', 'input.mp4', 'output.avi']);
+
+ffmpeg.stdout.on('data', (data) => { console.log(`Processing: ${data}`);
+}); `
+
+* * * * *
+
+### 3\. `execFile()`
+
+**Use Case:**\
+🔒 *Runs an executable file directly without a shell. Calling an executable directly for performance & security (no shell injection risk).*
+
+📌 Example: Using a CLI utility (like `imagemagick`) safely:
+
+
+`execFile('convert', ['input.jpg', '-resize', '100x100', 'output.jpg'], (err) => { if (!err) console.log('Image resized!');
+}); `
+
+* * * * *
+
+### 4\. `fork()`
+
+**Use Case:**\
+👨‍👩‍👧‍👦 *Spawns a new Node.js process and sets up IPC (inter-process communication). Best for spawning Node.js modules. Running multiple Node.js instances for parallel processing and communication.*
+
+📌 Example: Background processing jobs (e.g. processing a large CSV file).
+
+
+`const child = fork('csvProcessor.js');
+child.send({ path: 'big-file.csv' });
+
+child.on('message', (msg) => { console.log(`Job status: ${msg.status}`);
+}); `
+
+### **12. What is REPL in context of Node? ☆☆☆
 
 [](https://gist.github.com/paulfranco/9f88a2879b7b7d88de5d1921aef2093b#q21-what-is-repl-in-context-of-node-)
 
@@ -486,9 +504,96 @@ Answer: REPL stands for Read Eval Print Loop and it represents a computer envi
 -   Print - Prints the result
 -   Loop - Loops the above command until user press ctrl-c twice.
 
-### How does Node.js handle child threads? ☆☆☆
+### **13. How does Node.js handle child threads? ☆☆☆
 
-###  Why to use Buffers instead of binary strings to handle binary data ? ☆☆☆☆
+In Node.js, child threads are handled using the **`worker_threads`** module or the **`child_process`** module, depending on what kind of task you want to perform.
+
+Here's a breakdown of how Node.js handles child threads:
+
+* * * * *
+
+### 🚧 1. **Node.js Is Single-Threaded by Default**
+
+Node.js runs on a **single-threaded event loop**, meaning it handles all incoming requests on a single main thread. However, for **CPU-intensive tasks**, this can become a bottleneck.
+
+To solve this, Node.js allows **offloading work** to child threads or separate processes using:
+
+-   **`worker_threads`** -- for multi-threading within the same process.
+
+-   **`child_process`** -- for spawning entirely new processes (not threads).
+
+* * * * *
+
+### 🔄 2. **Using `worker_threads` for Child Threads**
+
+-   Introduced in Node.js v10.5.0+
+
+-   Allows true **multi-threading** within Node.js
+
+-   Useful for CPU-intensive tasks like image processing, large data calculations, etc.
+
+#### ✅ How It Works:
+
+-   Each worker runs in its own thread.
+
+-   Workers communicate with the main thread using messages (`postMessage`, `on('message')`).
+
+#### 🧠 Example:
+
+````
+const { Worker } = require('worker_threads');
+
+const worker = new Worker('./worker.js');  // file with heavy computation\
+worker.postMessage('start');
+
+worker.on('message', (result) => {\
+  console.log(`Result from worker: ${result}`);\
+});
+````
+
+````
+const { parentPort } = require('worker_threads');
+
+parentPort.on('message', (msg) => { let result = 0; for (let i = 0; i < 1e9; i++) result += i;
+  parentPort.postMessage(result);
+}); 
+
+````
+* * * * *
+
+### 🔥 3. **Using `child_process` for External Processes**
+
+-   Used to run **entirely separate processes**, even other Node.js apps or system scripts.
+
+-   Useful when you want isolation or need to run shell commands.
+
+Node.js provides methods like:
+
+-   `spawn()`
+
+-   `exec()`
+
+-   `execFile()`
+
+-   `fork()` (special for spawning other Node.js scripts with communication)
+
+* * * * *
+
+### ⚙️ Internal Thread Pool (libuv)
+
+Node.js internally uses a **libuv thread pool** (4 threads by default) for some async operations:
+
+-   File system operations
+
+-   DNS lookups
+
+-   Compression, encryption
+
+-   Others that are blocking in nature
+
+But this is **transparent to you** unless you explicitly use `worker_threads`.
+
+### **14. Why to use Buffers instead of binary strings to handle binary data ? ☆☆☆☆
 
 [](https://gist.github.com/paulfranco/9f88a2879b7b7d88de5d1921aef2093b#q11-why-to-use-buffers-instead-of-binary-strings-to-handle-binary-data--)
 
@@ -496,7 +601,7 @@ Answer: Pure JavaScript does not able to handle straight binary data very well.
 
 Source: *codingdefined.com*
 
-### Q12: How to use Buffer in Node.js? ☆☆☆
+### **15: How to use Buffer in Node.js? ☆☆☆
 
 [](https://gist.github.com/paulfranco/9f88a2879b7b7d88de5d1921aef2093b#q12-how-to-use-buffer-in-nodejs-)
 
@@ -508,7 +613,7 @@ Answer: Node.js, in its essence, is a single thread process. It does not expose
 
 If threading support is desired in a Node.js application, there are tools available to enable it, such as the ChildProcess module.
 
-### Explain usage of NODE_ENV ☆☆☆☆
+### **16: Explain usage of NODE_ENV ☆☆☆☆
 
 [](https://gist.github.com/paulfranco/9f88a2879b7b7d88de5d1921aef2093b#q14-explain-usage-of-node_env-)
 
@@ -525,13 +630,13 @@ if (process.env.NODE_ENV === "production")
 ```
 
 
-### **If Node.js is Single-Threaded, How Does It Handle Concurrency?**
+### **16. If Node.js is Single-Threaded, How Does It Handle Concurrency?**
 
 Node.js is **single-threaded**, but it is designed to handle **high concurrency** efficiently using its **event-driven, non-blocking architecture**. This is achieved using the **event loop** and **asynchronous I/O operations**, which allow Node.js to handle multiple requests without creating a separate thread for each request.
 
 * * * * *
 
-### **Understanding Node.js Concurrency Model**
+### **17. Understanding Node.js Concurrency Model**
 
 Even though Node.js runs on a **single thread**, it can handle many operations concurrently because of the following mechanisms:
 
@@ -631,24 +736,11 @@ Since Node.js runs on a single thread, **CPU-heavy operations (e.g., image proc
 
 * * * * *
 
-### **Conclusion**
-
-Node.js handles concurrency efficiently despite being single-threaded. It achieves this using:
-
--   **Asynchronous, non-blocking I/O**
--   **The Event Loop**
--   **Worker Threads (libuv)**
--   **Delegating tasks to the OS Kernel**
-
-This architecture makes Node.js ideal for **scalable web applications**, especially **APIs, streaming services, real-time applications, and chat apps**. However, for CPU-intensive tasks, solutions like **worker threads, clustering, and external services** should be used.
-
 ***2. Asynchronous Programming (15 Questions)***
-
-Here are **detailed explanations** for these important Node.js topics:
 
 ---
 
-## **1. What are callbacks in Node.js?**
+## **18. What are callbacks in Node.js?**
 A **callback** is a **function** that is passed as an argument to another function and is executed after the completion of that function.
 
 ### **How Callbacks Work**
@@ -672,7 +764,7 @@ fs.readFile('example.txt', 'utf8', (err, data) => {
 
 ---
 
-## **2. How do you avoid callback hell?**
+## **19. How do you avoid callback hell?**
 ### **What is Callback Hell?**
 Callback hell occurs when there are **too many nested callbacks**, making the code difficult to read and maintain.
 
@@ -768,7 +860,7 @@ notifyUser(userId);
 
 ---
 
-## **3. What is the difference between synchronous and asynchronous programming?**
+## **20. What is the difference between synchronous and asynchronous programming?**
 ### **Synchronous Programming**
 - **Executes code sequentially, blocking execution until completion.**
 - Each statement waits for the previous one to finish.
@@ -814,9 +906,7 @@ End
 
 ---
 
----
-
-## **5. What are Promises, and how do they improve async code?**
+## **21. What are Promises, and how do they improve async code?**
 A **Promise** is an object representing **the eventual completion or failure** of an asynchronous operation.
 
 ### **Promise States**
@@ -874,62 +964,363 @@ async function processAll() {
 processAll();
 ```
 
-🚀 **Benefits of Promises**
-✔ **Avoids callback hell**  
-✔ **Easier to read**  
-✔ **Better error handling (`.catch()`)**  
-
 ---
 
-## **Final Summary**
-| Concept | Key Takeaways |
-|---------|--------------|
-| **Callbacks** | Used for async operations, but can lead to callback hell. |
-| **Avoid Callback Hell** | Use Named Functions, Promises, or async/await. |
-| **Sync vs Async** | Sync blocks execution, Async doesn't. |
-| **Event Loop** | Handles async tasks using micro & macrotasks. |
-| **Promises** | Makes async code cleaner and avoids nesting. |
-
-### **How Does the Node.js Event Loop Work?**
-
-The **event loop** is one of the most critical concepts in **Node.js**, as it enables **non-blocking I/O operations**. It allows Node.js to efficiently handle multiple operations **asynchronously** without blocking the main thread.
+### **22. How Does the Node.js Event Loop Work?**
+Node.js uses a **single-threaded**, **event-driven** architecture powered by the **event loop**. This model allows Node.js to perform **non-blocking I/O operations**, even though JavaScript itself runs on a single thread.
 
 * * * * *
 
-**1\. What is the Event Loop?**
--------------------------------
+🔁 What Is the Event Loop?
+--------------------------
 
-The **event loop** is a mechanism in Node.js that continuously checks and executes tasks from different **queues**.
-
--   It processes **asynchronous operations** like **I/O, timers, network requests**, and **callbacks**.
--   It ensures that **Node.js remains single-threaded** while handling multiple operations concurrently.
+The **event loop** is what allows Node.js to handle **concurrent operations** without multiple threads. It works by offloading operations (like file reads or HTTP requests) to the system, and when the operation is finished, its callback is pushed into the **callback queue**, waiting for the main thread (the call stack) to be free.
 
 * * * * *
 
-**2\. How Does the Event Loop Work?**
--------------------------------------
+📊 How the Event Loop Works -- Phase by Phase
+--------------------------------------------
 
-The event loop works in **phases** that execute tasks in a particular order.\
-Each cycle of the event loop is called a **"tick"**, and during each tick, Node.js processes different types of asynchronous operations.
+Each loop cycle, called a **tick**, goes through several **phases**. Each phase has a specific purpose and processes a specific type of callback. Here's a breakdown:
 
-### **Event Loop Phases**
+### 1\. **Timers Phase**
 
-1.  **Timers Phase**
-    -   Executes callbacks from `setTimeout()` and `setInterval()`.
-2.  **I/O Callbacks Phase**
-    -   Executes I/O callbacks (e.g., reading files, network requests).
-3.  **Idle, Prepare Phase** *(internal use)*
-    -   Used internally by Node.js for optimizations.
-4.  **Poll Phase**
-    -   Retrieves I/O events and executes callbacks.
-5.  **Check Phase**
-    -   Executes `setImmediate()` callbacks.
-6.  **Close Callbacks Phase**
-    -   Executes `close` event handlers like `socket.on('close')`.
+-   Executes callbacks scheduled by `setTimeout()` and `setInterval()` **if their scheduled time has elapsed**.
+
+### 2\. **Pending Callbacks**
+
+-   Executes callbacks for some system operations such as TCP errors or similar OS-level operations.
+
+### 3\. **Idle, Prepare (Internal use)**
+
+-   Node.js internal use only. Not generally relevant for application developers.
+
+### 4\. **Poll Phase**
+
+-   Retrieves new I/O events and executes their callbacks.
+
+-   If the poll queue is empty:
+
+    -   If `setImmediate()` was scheduled, it moves to the **check phase**.
+
+    -   If not, it waits for incoming events.
+
+### 5\. **Check Phase**
+
+-   Executes callbacks scheduled with `setImmediate()`.
+
+### 6\. **Close Callbacks**
+
+-   Executes callbacks related to closing a resource, e.g., `socket.on('close', ...)`.
 
 * * * * *
 
-**3\. Node.js Event Loop Execution Order**
+🔂 Special Queues: `nextTick()` and Microtasks
+----------------------------------------------
+
+Node.js also includes **two special types of callback queues**:
+
+### `process.nextTick()`
+
+-   Adds a callback to the **nextTick queue**, which is processed **immediately after the current operation** completes and **before** the event loop continues.
+
+### Microtask Queue (e.g., `Promise.then`)
+
+-   Microtasks are processed **right after the current phase** and **before the event loop moves to the next phase**.
+
+* * * * *
+
+🔄 Event Loop Execution Order (Simplified)
+------------------------------------------
+
+1.  Execute **top-level synchronous code**
+
+2.  Process `process.nextTick()` queue
+
+3.  Process **microtasks queue**
+
+4.  Continue with the **event loop phases**:
+
+    -   Timers
+
+    -   Pending callbacks
+
+    -   Poll
+
+    -   Check
+
+    -   Close callbacks
+
+5.  Repeat from step 2
+
+### Execution of Each Event Loop Stage in Node.js: Order of Execution
+
+Node.js uses an **event-driven, non-blocking I/O model**, and the **event loop** is a critical part of this process. The event loop processes tasks in **phases**, each having its own purpose and execution order. The order in which the event loop stages are executed is important because it determines when various types of callbacks and events are handled.
+
+Let's break down the **event loop phases** in order of execution:
+
+### 1\. **Timers Phase**
+
+-   **Purpose**: This phase handles the execution of callbacks for **`setTimeout()`** and **`setInterval()`**.
+
+-   **When it runs**: This phase executes after the specified delay for `setTimeout` or `setInterval` has passed. The event loop checks whether any timers need to be triggered.
+
+#### Order of Execution:
+
+-   **First** to run among the event loop phases (but only after the synchronous code has been executed).
+
+-   Executes the **callbacks of `setTimeout()` and `setInterval()`** whose time limit has passed.
+
+-   However, the timers do not execute exactly after the specified time. The callback will be queued to execute as soon as possible but not necessarily **immediately after** the delay.
+
+-   Executes **timers** set by `setTimeout()` and `setInterval()`.
+-   The actual execution time **may be delayed** due to other phases.
+
+```
+console.log('Before Timer');
+setTimeout(() => console.log('Timer executed'), 1000);
+console.log('After Timer');
+
+```
+
+**Output:**
+
+```
+Before Timer
+After Timer
+Timer executed (after ~1s)
+
+```
+
+* * * * *
+
+### 2\. **I/O Callbacks Phase**
+
+-   **Purpose**: This phase is responsible for executing most **I/O-related callbacks** like file system operations, database queries, network requests, etc.
+
+-   **When it runs**: After the timers phase, the event loop processes callbacks that handle input/output events.
+
+#### Order of Execution:
+
+-   This phase runs after the **Timers Phase**.
+
+-   It executes callbacks that were scheduled in **previous iterations** of the event loop.
+
+-   Executes **callbacks from asynchronous I/O operations** (e.g., `fs.readFile()`).
+-   Runs after the **Timers phase**.
+
+```
+const fs = require('fs');
+
+fs.readFile('file.txt', 'utf8', () => {
+    console.log('File read completed');
+});
+console.log('Reading file...');
+
+```
+
+**Output:**
+
+```
+Reading file...
+File read completed (executed in I/O Callbacks phase)
+
+```
+
+* * * * *
+
+### 3\. **Idle, Prepare Phase**
+
+-   **Purpose**: This phase is primarily used for Node.js internals. It doesn't directly execute user code but is used for setting up internal data.
+
+-   **When it runs**: It runs **internally** and not commonly used for direct callback execution.
+
+#### Order of Execution:
+
+-   **Rarely used** for application-level code.
+
+-   This phase is skipped unless explicitly needed by Node.js internals.
+
+-   **Retrieves and executes I/O events** (network requests, file system, database queries).
+-   If no I/O operations are pending, it **waits** for new events.
+
+```
+setTimeout(() => console.log('Timer Callback'), 0);
+setImmediate(() => console.log('Immediate Callback'));
+
+console.log('Synchronous Code');
+
+```
+
+**Output:**
+
+```
+Synchronous Code
+Timer Callback
+Immediate Callback
+
+```
+
+-   `setTimeout()` **executes in the Timers phase**.
+-   `setImmediate()` **executes in the Check phase**, after Poll.
+
+* * * * *
+
+### 4\. **Poll Phase**
+
+-   **Purpose**: This is the **most important phase** where the event loop waits for **I/O events**.
+
+    -   If there are I/O callbacks that are ready, they are processed during this phase.
+
+    -   If no I/O callbacks are pending, the event loop will either wait for new events or process **timers** or **setImmediate** callbacks.
+
+-   **When it runs**: After the **I/O Callbacks Phase**, the event loop enters the **Poll Phase** and waits for events to arrive. This is also where the **blocking** I/O events (like file reads, etc.) are processed.
+
+#### Order of Execution:
+
+-   The event loop enters the **Poll Phase** right after the **Timers Phase** and **I/O Callbacks Phase**.
+
+-   If there are **pending I/O events**, it processes them here.
+
+-   If there are no pending events, the event loop checks the **microtask queue** for pending promises (`Promise.then()`, `catch()` callbacks).
+
+-   Executes callbacks scheduled with `setImmediate()`.
+-   If **I/O callbacks are pending**, `setImmediate()` **executes before timers**.
+
+```
+const fs = require('fs');
+
+fs.readFile('file.txt', () => {
+    setTimeout(() => console.log('Timeout Callback'), 0);
+    setImmediate(() => console.log('Immediate Callback'));
+});
+
+```
+
+**Output:**
+
+```
+Immediate Callback
+Timeout Callback
+
+```
+
+-   **`setImmediate()` executes before `setTimeout(0)`.**
+
+* * * * *
+
+### 5\. **Check Phase**
+
+-   **Purpose**: This phase is for **`setImmediate()`** callbacks.
+
+-   **When it runs**: The **Check Phase** is executed after the **Poll Phase** and after all the **I/O operations**.
+
+#### Order of Execution:
+
+-   It runs **after the Poll Phase** but before the **Close Callbacks Phase**.
+
+-   It is primarily used to execute callbacks scheduled by **`setImmediate()`**.
+
+-   Handles cleanup operations (e.g., `socket.on('close', callback)`).
+
+```
+const net = require('net');
+
+const server = net.createServer();
+server.on('close', () => console.log('Server Closed'));
+
+server.close();
+
+```
+
+* * * * *
+
+### 6\. **Close Callbacks Phase**
+
+-   **Purpose**: This phase handles the **cleanup operations** (like closing a socket, closing a file descriptor).
+
+-   **When it runs**: The event loop processes any **callbacks associated with closing** the resource. For example, `socket.on('close')`.
+
+#### Order of Execution:
+
+-   This phase runs **last** in the event loop cycle.
+
+* * * * *
+
+### Event Loop Cycle (Order of Execution of Phases)
+
+1.  **Timers Phase** (`setTimeout`, `setInterval`)
+
+2.  **I/O Callbacks Phase** (network requests, file system operations)
+
+3.  **Idle, Prepare Phase** (internal use, not much direct code execution)
+
+4.  **Poll Phase** (waiting for events, executing I/O events)
+
+5.  **Check Phase** (`setImmediate` callbacks)
+
+6.  **Close Callbacks Phase** (cleanup)
+
+* * * * *
+
+### Example Flow in Node.js
+
+Consider this code to illustrate how the event loop phases interact:
+
+````
+
+console.log('Start');
+
+// Timer 1 (setTimeout)
+setTimeout(() => {
+    console.log('Timeout 1');
+}, 0);
+
+// Immediate callback
+setImmediate(() => {
+    console.log('Immediate 1');
+});
+
+// Promise resolution
+Promise.resolve().then(() => {
+    console.log('Promise 1');
+});
+
+console.log('End');
+
+````
+
+
+**Execution Flow:**
+
+1.  **Start** and **End** are printed first because they are synchronous and are executed immediately on the **call stack**.
+
+2.  **Promise 1** is executed next because it's added to the **microtask queue** and processed before the event loop continues.
+
+3.  **Immediate 1** is executed next because it is handled in the **Check Phase**.
+
+4.  **Timeout 1** is executed last because it's a **timed callback**, and `setTimeout` callbacks are processed in the **Timers Phase**.
+
+* * * * *
+
+### Summary of Execution Order:
+
+1.  **Synchronous code** (like `console.log`) runs first.
+
+2.  **Microtasks** (like promises) are handled next.
+
+3.  **Timers** (like `setTimeout`) run after that.
+
+4.  **I/O events** are handled in the **Poll Phase**.
+
+5.  **Immediate callbacks** (via `setImmediate()`) are executed afterward.
+
+6.  Finally, **close callbacks** (like resource cleanup) are processed last.
+
+
+* * * * *
+
+Node.js Event Loop Execution Order
 ------------------------------------------
 
 ### **Example: Understanding Execution Order**
@@ -961,7 +1352,7 @@ setImmediate
 
 * * * * *
 
-**4\. Microtasks vs. Macrotasks**
+**Microtasks vs. Macrotasks**
 ---------------------------------
 
 The event loop has two types of task queues:
@@ -976,7 +1367,7 @@ The event loop has two types of task queues:
 
 * * * * *
 
-**5\. Key Differences Between Asynchronous Methods**
+** Key Differences Between Asynchronous Methods**
 ----------------------------------------------------
 
 | Function | Phase |
@@ -988,222 +1379,7 @@ The event loop has two types of task queues:
 
 * * * * *
 
-**6\. Deep Dive into Event Loop Phases**
 ----------------------------------------
-
-### **1️⃣ Timers Phase (`setTimeout`, `setInterval`)**
-
--   Executes **timers** set by `setTimeout()` and `setInterval()`.
--   The actual execution time **may be delayed** due to other phases.
-
-```
-console.log('Before Timer');
-setTimeout(() => console.log('Timer executed'), 1000);
-console.log('After Timer');
-
-```
-
-**Output:**
-
-```
-Before Timer
-After Timer
-Timer executed (after ~1s)
-
-```
-
-* * * * *
-
-### **2️⃣ I/O Callbacks Phase**
-
--   Executes **callbacks from asynchronous I/O operations** (e.g., `fs.readFile()`).
--   Runs after the **Timers phase**.
-
-```
-const fs = require('fs');
-
-fs.readFile('file.txt', 'utf8', () => {
-    console.log('File read completed');
-});
-console.log('Reading file...');
-
-```
-
-**Output:**
-
-```
-Reading file...
-File read completed (executed in I/O Callbacks phase)
-
-```
-
-* * * * *
-
-### **3️⃣ Poll Phase**
-
--   **Retrieves and executes I/O events** (network requests, file system, database queries).
--   If no I/O operations are pending, it **waits** for new events.
-
-```
-setTimeout(() => console.log('Timer Callback'), 0);
-setImmediate(() => console.log('Immediate Callback'));
-
-console.log('Synchronous Code');
-
-```
-
-**Output:**
-
-```
-Synchronous Code
-Timer Callback
-Immediate Callback
-
-```
-
--   `setTimeout()` **executes in the Timers phase**.
--   `setImmediate()` **executes in the Check phase**, after Poll.
-
-* * * * *
-
-### **4️⃣ Check Phase (`setImmediate`)**
-
--   Executes callbacks scheduled with `setImmediate()`.
--   If **I/O callbacks are pending**, `setImmediate()` **executes before timers**.
-
-```
-const fs = require('fs');
-
-fs.readFile('file.txt', () => {
-    setTimeout(() => console.log('Timeout Callback'), 0);
-    setImmediate(() => console.log('Immediate Callback'));
-});
-
-```
-
-**Output:**
-
-```
-Immediate Callback
-Timeout Callback
-
-```
-
--   **`setImmediate()` executes before `setTimeout(0)`.**
-
-* * * * *
-
-### **5️⃣ Close Callbacks Phase**
-
--   Handles cleanup operations (e.g., `socket.on('close', callback)`).
-
-```
-const net = require('net');
-
-const server = net.createServer();
-server.on('close', () => console.log('Server Closed'));
-
-server.close();
-
-```
-
-* * * * *
-
-**7\. `process.nextTick()` vs. `setImmediate()`**
--------------------------------------------------
-
-| Function | Execution Timing |
-| --- | --- |
-| **`process.nextTick()`** | Executes **before** the next event loop iteration. |
-| **`setImmediate()`** | Executes in the **Check phase** (after I/O operations). |
-
-✅ **Example**
-
-```
-setImmediate(() => console.log('setImmediate'));
-process.nextTick(() => console.log('nextTick'));
-console.log('Synchronous');
-
-```
-
-**Output:**
-
-```
-Synchronous
-nextTick
-setImmediate
-
-```
-
--   **`process.nextTick()` executes immediately** after synchronous code.
--   **`setImmediate()` waits for the event loop to reach the Check phase**.
-
-* * * * *
-
-**8\. Real-World Use Cases**
-----------------------------
-
-### **🔹 Optimizing Performance with `process.nextTick()`**
-
-```
-function heavyComputation() {
-    process.nextTick(() => console.log('Processing data...'));
-}
-
-console.log('Start');
-heavyComputation();
-console.log('End');
-
-```
-
-**Output:**
-
-```
-Start
-End
-Processing data...
-
-```
-
--   `process.nextTick()` ensures **"Processing data..."** executes after synchronous code.
-
-* * * * *
-
-### **🔹 Using `setImmediate()` for Asynchronous Tasks**
-
-```
-const server = require('http').createServer();
-
-server.on('request', (req, res) => {
-    setImmediate(() => {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('Hello World');
-    });
-});
-
-server.listen(3000);
-
-```
-
--   Ensures **request handling** doesn't block other operations.
-
-* * * * *
-
-**9\. Summary**
----------------
-
-| **Concept** | **Description** |
-| --- | --- |
-| **Event Loop** | Mechanism that handles **asynchronous operations**. |
-| **Microtasks** | `process.nextTick()`, Promises (`.then()`). |
-| **Macrotasks** | Timers, I/O, `setImmediate()`. |
-| **Timers Phase** | Executes `setTimeout()` & `setInterval()`. |
-| **I/O Callbacks Phase** | Executes I/O operations (e.g., `fs.readFile()`). |
-| **Poll Phase** | Waits for new I/O events. |
-| **Check Phase** | Executes `setImmediate()`. |
-| **Close Callbacks Phase** | Handles close event callbacks. |
-| **`process.nextTick()`** | Executes before the next event loop iteration. |
-| **`setImmediate()`** | Executes in the Check phase. |
 
 🚀 **Key Takeaway:**
 
@@ -1464,32 +1640,86 @@ setImmediate
 
 * * * * *
 
-**📌 Summary Table**
---------------------
+**23\. How does the Microtask Queue differ from the Macrotask Queue?**
+----------------------------------------------------------------------
 
-| Concept | Description |
-| --- | --- |
-| **Event Loop** | Runs continuously, processing different queues. |
-| **Microtasks** | `process.nextTick()`, Promises (executed before next phase). |
-| **Timers Phase** | Executes `setTimeout()` and `setInterval()`. |
-| **I/O Callbacks Phase** | Handles network requests, file system operations. |
-| **Poll Phase** | Retrieves new I/O tasks, executes callbacks. |
-| **Check Phase** | Executes `setImmediate()` callbacks. |
-| **Close Callbacks Phase** | Executes cleanup operations. |
+| **Feature** | **Microtask Queue** | **Macrotask Queue** |
+| --- | --- | --- |
+| **Examples** | `process.nextTick()`, `Promise.then()` | `setTimeout()`, `setImmediate()`, `setInterval()` |
+| **Execution Priority** | **Higher (executes first, before the next phase of event loop)** | Lower (executes after microtasks) |
+| **Use Case** | Urgent tasks that must be completed before moving to the next event loop cycle | Normal asynchronous operations like timers and I/O |
+
+✅ **Example**
+
+```
+console.log("Start");
+
+setTimeout(() => console.log("setTimeout"), 0);
+setImmediate(() => console.log("setImmediate"));
+process.nextTick(() => console.log("nextTick"));
+Promise.resolve().then(() => console.log("Promise"));
+
+console.log("End");
+
+```
+
+**Output:**
+
+```
+Start
+End
+nextTick
+Promise
+setTimeout
+setImmediate
+
+```
+
+🚀 **Key Takeaways**
+
+1.  **Microtasks (`process.nextTick()`, `Promise.then()`) execute before Macrotasks**.
+2.  **Timers (`setTimeout()`) and I/O (`setImmediate()`) are scheduled in the Event Loop**.
+3.  **Order of Execution:**
+    -   **Synchronous Code → Microtasks → Macrotasks**.
 
 * * * * *
 
-**🚀 Key Takeaways**
---------------------
+### **23. What is the difference between `setImmediate()`, `process.nextTick()`, and `setTimeout()`?**  
 
-✔️ **Event Loop is single-threaded**, but allows async operations using callbacks.\
-✔️ **Microtasks (`process.nextTick()` & Promises) always execute before the next event loop phase.**\
-✔️ **`setImmediate()` executes before `setTimeout(0)` inside I/O operations.**\
-✔️ **Understanding event loop phases helps optimize Node.js performance.**
+| Function            | Execution Timing |
+|---------------------|-----------------|
+| `setImmediate()`    | Executes **after the current event loop cycle is complete**, before any I/O events. |
+| `process.nextTick()` | Executes **before the event loop continues** (highest priority). |
+| `setTimeout(fn, 0)` | Executes **after the event loop cycle**, with a minimum delay of **1ms**. |
 
-* * * * *
+✅ **Example:**  
+```javascript
+console.log('Start');
 
-**6\. Difference between `Promise.all()`, `Promise.any()`, `Promise.race()`, and `Promise.allSettled()`**
+setImmediate(() => console.log('setImmediate'));
+process.nextTick(() => console.log('process.nextTick'));
+setTimeout(() => console.log('setTimeout'), 0);
+
+console.log('End');
+```
+
+**Output:**  
+```
+Start
+End
+process.nextTick
+setTimeout
+setImmediate
+```
+
+📌 **Key Takeaways:**  
+- `process.nextTick()` executes **before anything else**, even before `setTimeout(0)`.  
+- `setTimeout(0)` executes **after the current event loop cycle**.  
+- `setImmediate()` executes **after I/O operations**. 
+
+
+
+**24\. Difference between `Promise.all()`, `Promise.any()`, `Promise.race()`, and `Promise.allSettled()`**
 ---------------------------------------------------------------------------------------------------------
 
 ### **✅ `Promise.all()`**
@@ -1606,7 +1836,7 @@ Promise.allSettled([p1, p2]).then((results) => console.log(results));
 
 * * * * *
 
-**7\. What is `async/await`, and how does it simplify asynchronous programming?**
+**25\. What is `async/await`, and how does it simplify asynchronous programming?**
 ---------------------------------------------------------------------------------
 
 -   `async/await` is a modern way to handle asynchronous code **without using callbacks or `.then()` chains.**
@@ -1634,7 +1864,7 @@ fetchData();
 
 * * * * *
 
-**8\. How do you handle errors in `async/await`?**
+**26\. How do you handle errors in `async/await`?**
 --------------------------------------------------
 
 ### **✅ Using `try...catch`**
@@ -1668,103 +1898,7 @@ fetchData();
 
 * * * * *
 
-**9\. Difference between `process.nextTick()` and `setImmediate()`**
---------------------------------------------------------------------
-
-| Feature | `process.nextTick()` | `setImmediate()` |
-| --- | --- | --- |
-| Execution Timing | Runs **before** I/O and timers | Runs **after** I/O callbacks |
-| Priority | **Higher** (executes before next event loop phase) | **Lower** (executes in the Check phase) |
-| Use Case | Urgent callbacks | Less urgent but immediate tasks |
-
-✅ **Example**
-
-```
-console.log("Start");
-
-process.nextTick(() => console.log("nextTick callback"));
-setImmediate(() => console.log("setImmediate callback"));
-
-console.log("End");
-
-```
-
-**Output:**
-
-```
-Start
-End
-nextTick callback
-setImmediate callback
-
-```
-
-🚀 **Key Takeaway:**
-
--   `process.nextTick()` **executes before any I/O or timer callbacks**.
--   `setImmediate()` **executes in the next iteration of the event loop**.
-
-* * * * *
-
-**10\. How does the Microtask Queue differ from the Macrotask Queue?**
-----------------------------------------------------------------------
-
-| **Feature** | **Microtask Queue** | **Macrotask Queue** |
-| --- | --- | --- |
-| **Examples** | `process.nextTick()`, `Promise.then()` | `setTimeout()`, `setImmediate()`, `setInterval()` |
-| **Execution Priority** | **Higher (executes first, before the next phase of event loop)** | Lower (executes after microtasks) |
-| **Use Case** | Urgent tasks that must be completed before moving to the next event loop cycle | Normal asynchronous operations like timers and I/O |
-
-✅ **Example**
-
-```
-console.log("Start");
-
-setTimeout(() => console.log("setTimeout"), 0);
-setImmediate(() => console.log("setImmediate"));
-process.nextTick(() => console.log("nextTick"));
-Promise.resolve().then(() => console.log("Promise"));
-
-console.log("End");
-
-```
-
-**Output:**
-
-```
-Start
-End
-nextTick
-Promise
-setTimeout
-setImmediate
-
-```
-
-🚀 **Key Takeaways**
-
-1.  **Microtasks (`process.nextTick()`, `Promise.then()`) execute before Macrotasks**.
-2.  **Timers (`setTimeout()`) and I/O (`setImmediate()`) are scheduled in the Event Loop**.
-3.  **Order of Execution:**
-    -   **Synchronous Code → Microtasks → Macrotasks**.
-
-* * * * *
-
-**📌 Final Summary**
---------------------
-
-| Concept | Description |
-| --- | --- |
-| **`Promise.all()`** | Resolves when **all promises resolve** or **rejects if any fail**. |
-| **`Promise.any()`** | Resolves when **any one promise resolves**. |
-| **`Promise.race()`** | Resolves/rejects **when the first promise settles**. |
-| **`Promise.allSettled()`** | Resolves when **all promises settle (success/failure)**. |
-| **`async/await`** | Improves readability of async code, avoiding `.then()` chains. |
-| **Error Handling in `async/await`** | Use **`try...catch`** or `.catch()` for promise handling. |
-| **`process.nextTick()` vs `setImmediate()`** | `nextTick()` runs **before next loop**, `setImmediate()` runs in **Check phase**. |
-| **Microtask vs Macrotask Queue** | Microtasks execute **before macrotasks** in the event loop. |
-
-**11\. How do you implement throttling and debouncing in Node.js?**
+**27\. How do you implement throttling and debouncing in Node.js?**
 -------------------------------------------------------------------
 
 ### **✅ Throttling**
@@ -1856,7 +1990,7 @@ debouncedFunction(); // Only the last call will execute
 
 * * * * *
 
-**12\. Difference between an event-driven and a multi-threaded approach**
+**28\. Difference between an event-driven and a multi-threaded approach**
 -------------------------------------------------------------------------
 
 | Feature | **Event-Driven Approach** | **Multi-Threaded Approach** |
@@ -1894,7 +2028,7 @@ worker.on("message", (msg) => console.log("Worker response:", msg));
 
 * * * * *
 
-**13\. How do you optimize async code execution?**
+**29\. How do you optimize async code execution?**
 --------------------------------------------------
 
 ### ✅ **1\. Use `Promise.all()` for Parallel Execution**
@@ -1945,7 +2079,7 @@ worker.postMessage("Start");
 
 * * * * *
 
-**14\. What is a Worker Thread, and how do you use it in Node.js?**
+**30\. What is a Worker Thread, and how do you use it in Node.js?**
 -------------------------------------------------------------------
 
 ### **📌 What is a Worker Thread?**
@@ -1981,7 +2115,7 @@ worker.on("message", (msg) => console.log("Worker response:", msg));
 
 * * * * *
 
-**15\. How do you handle multiple async operations in parallel?**
+**31\. How do you handle multiple async operations in parallel?**
 -----------------------------------------------------------------
 
 ### ✅ **1\. Using `Promise.all()` (Best for Independent Operations)**
@@ -2038,25 +2172,13 @@ worker2.on("message", (msg) => console.log("Worker 2:", msg));
 
 * * * * *
 
-**🚀 Final Summary**
---------------------
-
-| Concept | Description |
-| --- | --- |
-| **Throttling** | Limits function execution to once per specified time interval. |
-| **Debouncing** | Delays function execution until after a specified delay. |
-| **Event-Driven vs Multi-Threading** | Event-driven is async (Node.js), multi-threading uses multiple threads (Java, Python). |
-| **Optimizing Async Execution** | Use `Promise.all()`, `async/await`, `setImmediate()`, Worker Threads. |
-| **Worker Threads** | Run CPU-intensive tasks in separate threads. |
-| **Handling Multiple Async Operations** | Use `Promise.all()`, `Promise.race()`, `Promise.allSettled()`, Worker Threads. |
-
 ***3. Node.js Modules & NPM (10 Questions)***
 
 Here are detailed answers to your questions about **npm** and **module management** in Node.js:
 
 * * * * *
 
-### **1\. What is npm, and how does it work?**
+### *32\. What is npm, and how does it work?**
 
 **npm (Node Package Manager)** is the default package manager for Node.js. It is used to install, manage, and share JavaScript libraries and tools.
 
@@ -2099,7 +2221,7 @@ Here are detailed answers to your questions about **npm** and **module manage
 
 * * * * *
 
-### **2\. What is the difference between `dependencies` and `devDependencies` in package.json?**
+### **33\. What is the difference between `dependencies` and `devDependencies` in package.json?**
 
 | Type | Purpose | Example Usage |
 | --- | --- | --- |
@@ -2129,7 +2251,7 @@ npm install jest --save-dev
 
 * * * * *
 
-### **3\. What is the purpose of `package-lock.json`?**
+### **34\. What is the purpose of `package-lock.json`?**
 
 -   Ensures **consistent dependency versions** across all environments.
 -   Locks the exact versions of installed dependencies to avoid unexpected updates.
@@ -2144,7 +2266,7 @@ rm package-lock.json && npm install
 
 * * * * *
 
-### **4\. How do you create a custom module in Node.js?**
+### **35\. How do you create a custom module in Node.js?**
 
 A **custom module** in Node.js is a JavaScript file exporting functions, objects, or classes.
 
@@ -2177,7 +2299,7 @@ console.log(math.subtract(5, 3));  // Output: 2
 
 * * * * *
 
-### **5\. What are peer dependencies, and when should you use them?**
+### **36\. What are peer dependencies, and when should you use them?**
 
 **Peer dependencies** are used when a package requires a specific dependency **but does not install it automatically**. Instead, it expects the parent project to provide it.
 
@@ -2207,7 +2329,7 @@ npm install react
 
 * * * * *
 
-### **6\. How do you publish a package to npm?**
+### **37\. How do you publish a package to npm?**
 
 #### **Step 1: Login to npm**
 
@@ -2247,7 +2369,7 @@ npm publish --access public
 
 * * * * *
 
-### **7\. What is the difference between npm and yarn?**
+### **38\. What is the difference between npm and yarn?**
 
 | Feature | **npm** | **Yarn** |
 | --- | --- | --- |
@@ -2272,7 +2394,7 @@ yarn install
 
 * * * * *
 
-### **8\. How do you resolve module conflicts in Node.js?**
+### **39\. How do you resolve module conflicts in Node.js?**
 
 Module conflicts occur when different versions of the same package are installed due to dependency trees.
 
@@ -2312,7 +2434,7 @@ npm install
 
 * * * * *
 
-### **9\. How do you use `npx`, and when is it useful?**
+### **40\. How do you use `npx`, and when is it useful?**
 
 **`npx` (Node Package eXecute)** allows running Node.js packages **without installing them globally**.
 
@@ -2344,7 +2466,7 @@ npx eslint .
 
 * * * * *
 
-### **10\. What are the common issues with module resolution in Node.js?**
+### **41\. What are the common issues with module resolution in Node.js?**
 
 #### **1️⃣ Module Not Found (`MODULE_NOT_FOUND`)**
 
@@ -2400,25 +2522,9 @@ module.exports = { fromB: 'B', A };
 
 * * * * *
 
-**🚀 Summary**
---------------
-
-| Question | Key Points |
-| --- | --- |
-| **npm** | Manages Node.js packages and dependencies. |
-| **dependencies vs devDependencies** | `dependencies` for production, `devDependencies` for development. |
-| **package-lock.json** | Locks versions for consistency. |
-| **Custom Module** | Use `module.exports` to define modules. |
-| **Peer Dependencies** | Used for shared libraries that require manual installation. |
-| **Publishing to npm** | Use `npm publish` and `npm version`. |
-| **npm vs Yarn** | Yarn is faster, npm is default. |
-| **Resolving Module Conflicts** | Use `npm dedupe`, check `npm list`. |
-| **npx** | Runs packages without installing globally. |
-| **Module Resolution Issues** | Fix missing imports, version conflicts, circular dependencies. |
-
 ***4. File System & Streams (10 Questions)***
 
-**1\. How do you read and write files asynchronously in Node.js?**
+**42\. How do you read and write files asynchronously in Node.js?**
 ------------------------------------------------------------------
 
 In Node.js, the **`fs` (File System) module** provides methods to read and write files asynchronously, preventing the main thread from blocking.
@@ -2465,7 +2571,7 @@ fs.writeFile('output.txt', 'Hello, Node.js!', 'utf8', (err) => {
 
 * * * * *
 
-**2\. What is the difference between `fs.readFile()` and `fs.createReadStream()`?**
+**43\. What is the difference between `fs.readFile()` and `fs.createReadStream()`?**
 -----------------------------------------------------------------------------------
 
 | Feature | `fs.readFile()` | `fs.createReadStream()` |
@@ -2518,7 +2624,7 @@ stream.on('error', (err) => {
 
 * * * * *
 
-**3\. How do you handle file system errors in Node.js?**
+**44\. How do you handle file system errors in Node.js?**
 --------------------------------------------------------
 
 File system operations can fail due to various reasons (missing files, permission errors, etc.). Node.js provides **error-first callbacks** and **try-catch blocks** (for promises) to handle such cases.
@@ -2570,7 +2676,7 @@ readFile();
 
 * * * * *
 
-**4\. What is the purpose of `fs.promises` in Node.js?**
+**45\. What is the purpose of `fs.promises` in Node.js?**
 --------------------------------------------------------
 
 `fs.promises` is a **Promise-based API** for working with the file system **without callbacks**.
@@ -2607,20 +2713,7 @@ readFileAsync();
 
 * * * * *
 
-
-* * * * *
-
-**🚀 Summary**
---------------
-
-| Question | Key Points |
-| --- | --- |
-| **Reading/Writing Files** | Use `fs.readFile()` and `fs.writeFile()` for async operations. |
-| **`fs.readFile()` vs `fs.createReadStream()`** | Use `fs.readFile()` for small files, `fs.createReadStream()` for large files. |
-| **Handling Errors** | Always check `err`, use `try...catch` with `fs.promises`. |
-| **`fs.promises`** | Provides promise-based file handling (`async/await`). |
-
-# **What Are Streams in Node.js and How Do They Work?**
+**46\. What Are Streams in Node.js and How Do They Work?**
 
 ## **1. Introduction to Streams in Node.js**
 Streams in Node.js are a powerful way to **handle and manipulate streaming data**. They enable **efficient** processing of large files, network communications, and real-time data transfer by reading/writing data **in chunks**, rather than loading everything into memory at once.
@@ -2832,7 +2925,7 @@ writeStream.on('finish', () => {
 
 ---
 
-**6\. What Are the Different Types of Streams in Node.js?**
+**47\. What Are the Different Types of Streams in Node.js?**
 -----------------------------------------------------------
 
 Streams in Node.js are categorized into four types based on their functionality. They allow efficient handling of large amounts of data without loading everything into memory.
@@ -2848,7 +2941,7 @@ Streams in Node.js are categorized into four types based on their functionality.
 
 * * * * *
 
-**7\. What Is the Difference Between `pipe()` and Stream Chaining?**
+**48\. What Is the Difference Between `pipe()` and Stream Chaining?**
 --------------------------------------------------------------------
 
 Both `pipe()` and stream chaining are used for connecting multiple streams, but they serve slightly different purposes.
@@ -2908,7 +3001,7 @@ fs.createReadStream('input.txt')
 
 * * * * *
 
-**8\. How Do You Handle Large File Uploads in Node.js?**
+**49\. How Do You Handle Large File Uploads in Node.js?**
 --------------------------------------------------------
 
 When dealing with **large file uploads**, the key challenge is **avoiding memory overload** by processing data in chunks.
@@ -2995,7 +3088,7 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 
 * * * * *
 
-**9\. How Do You Watch for File Changes in Node.js?**
+**50\. How Do You Watch for File Changes in Node.js?**
 -----------------------------------------------------
 
 In Node.js, you can monitor file changes **without manual intervention** using the `fs.watch()` or `fs.watchFile()`methods.
@@ -3044,7 +3137,7 @@ fs.watchFile('example.txt', { interval: 5000 }, (curr, prev) => {
 
 * * * * *
 
-**10\. How Do You Implement Backpressure Handling in Node.js Streams?**
+**51\. How Do You Implement Backpressure Handling in Node.js Streams?**
 -----------------------------------------------------------------------
 
 ### **What Is Backpressure?**
@@ -3086,20 +3179,9 @@ writeStream.on('drain', () => {
 
 * * * * *
 
-**🔥 Summary of Key Takeaways**
--------------------------------
-
--   **Streams** allow handling large files **efficiently**.
--   **`pipe()` connects streams**, while **stream chaining** allows multiple transformations.
--   **Large file uploads** should be handled using **streams or libraries like Busboy**.
--   **`fs.watch()` and `fs.watchFile()`** can monitor file changes.
--   **Backpressure handling** prevents memory overload by pausing/resuming streams.
-
-* * * * *
-
 ***Performance & Optimization (10 Questions)***
 
-**1\. How Do You Improve the Performance of a Node.js Application?**
+**52\. How Do You Improve the Performance of a Node.js Application?**
 --------------------------------------------------------------------
 
 Optimizing a **Node.js** application involves improving its speed, scalability, and efficiency while reducing resource usage. Below are key strategies:
@@ -3231,7 +3313,7 @@ if (cluster.isMaster) {
 
 * * * * *
 
-**2\. What Is Clustering in Node.js, and How Does It Work?**
+**53\. What Is Clustering in Node.js, and How Does It Work?**
 ------------------------------------------------------------
 
 ### **Why Clustering?**
@@ -3271,7 +3353,7 @@ if (cluster.isMaster) {
 
 * * * * *
 
-**3\. How Do You Optimize Memory Usage in Node.js?**
+**54\. How Do You Optimize Memory Usage in Node.js?**
 ----------------------------------------------------
 
 ### **Key Techniques:**
@@ -3306,7 +3388,7 @@ emitter.off('event', eventHandler); // Unregister after use
 
 * * * * *
 
-**4\. How Do You Prevent Memory Leaks in Node.js?**
+**55\. How Do You Prevent Memory Leaks in Node.js?**
 ---------------------------------------------------
 
 Memory leaks occur when objects **stay in memory** even when they are no longer needed.
@@ -3352,7 +3434,7 @@ function addData() {
 
 * * * * *
 
-**5\. What Is the Purpose of a Reverse Proxy with Node.js?**
+**56\. What Is the Purpose of a Reverse Proxy with Node.js?**
 ------------------------------------------------------------
 
 A **reverse proxy** sits between **clients and the Node.js server** to **improve performance, security, and scalability**.
@@ -3405,20 +3487,10 @@ sudo systemctl restart nginx
 -   **Improves security** by masking backend services.
 -   **Reduces latency** with caching.
 
-* * * * *
-
-**🔥 Summary of Key Takeaways**
--------------------------------
-
--   **Performance Optimization:** Use **async code, caching, compression, and clustering**.
--   **Clustering:** Uses **multiple worker processes** to utilize all CPU cores.
--   **Memory Optimization:** Use **buffers, remove listeners, and avoid global variables**.
--   **Memory Leaks Prevention:** Clear **timers, events, and unused objects**.
--   **Reverse Proxy:** Improves **scalability, security, and performance**.
 
 * * * * *
 
-**6\. How Do You Monitor Performance in a Node.js Application?**
+**57\. How Do You Monitor Performance in a Node.js Application?**
 ----------------------------------------------------------------
 
 Monitoring a Node.js application ensures **optimal performance, debugging, and detecting bottlenecks**. Below are key methods:
@@ -3496,7 +3568,7 @@ pm2 monit  # Live monitoring
 
 * * * * *
 
-**7\. How Does Load Balancing Work with Node.js?**
+**58\. How Does Load Balancing Work with Node.js?**
 --------------------------------------------------
 
 Load balancing ensures that incoming requests are **distributed across multiple instances** to **prevent overload and improve scalability**.
@@ -3554,7 +3626,7 @@ sudo systemctl restart nginx
 
 * * * * *
 
-**8\. What Are Some Ways to Optimize API Response Times?**
+**59\. What Are Some Ways to Optimize API Response Times?**
 ----------------------------------------------------------
 
 ### **1️⃣ Use Caching (Redis, Memory)**
@@ -3613,7 +3685,7 @@ app.get('/users', async (req, res) => {
 
 * * * * *
 
-**9\. How Do You Optimize Node.js Applications for High Concurrency?**
+**60\. How Do You Optimize Node.js Applications for High Concurrency?**
 ----------------------------------------------------------------------
 
 Concurrency means **handling multiple requests** simultaneously without degrading performance.
@@ -3668,7 +3740,7 @@ setImmediate(() => console.log('Executed after I/O tasks'));
 
 * * * * *
 
-**10\. What Is the Role of Caching in Node.js Performance?**
+**61\. What Is the Role of Caching in Node.js Performance?**
 ------------------------------------------------------------
 
 Caching **stores frequently accessed data** in memory, reducing the need for **repeated database queries**.
@@ -3733,22 +3805,9 @@ app.get('/data', async (req, res) => {
 
 * * * * *
 
-**🔥 Summary of Key Takeaways**
--------------------------------
-
-| Topic | Key Takeaways |
-| --- | --- |
-| **Performance Monitoring** | Use **`console.time()`**, `process.memoryUsage()`, `pm2`, and **APM tools**. |
-| **Load Balancing** | Use **Nginx, HAProxy, or Cluster Module** to handle multiple instances. |
-| **API Optimization** | Use **caching, pagination, and optimized DB queries**. |
-| **High Concurrency** | Use **clustering, worker threads, and setImmediate()**. |
-| **Caching** | Use **Redis, memory-cache** for **fast data retrieval**. |
-
-* * * * *
-
 ***Security & Best Practices (10 Questions)***
 
-**1\. What Are Common Security Vulnerabilities in Node.js?**
+**62\. What Are Common Security Vulnerabilities in Node.js?**
 ============================================================
 
 Security vulnerabilities in Node.js applications can lead to **data breaches, unauthorized access, or performance issues**. Below are the most common vulnerabilities:
@@ -3850,7 +3909,7 @@ app.use((err, req, res, next) => {
 
 * * * * *
 
-**2\. How Do You Prevent SQL Injection Attacks?**
+**63\. How Do You Prevent SQL Injection Attacks?**
 -------------------------------------------------
 
 SQL Injection happens when **user input is directly concatenated** into SQL queries.
@@ -3900,7 +3959,7 @@ if (error) return res.status(400).send(error.details);
 
 * * * * *
 
-**3\. How Do You Handle JWT Authentication in Node.js?**
+**64\. How Do You Handle JWT Authentication in Node.js?**
 --------------------------------------------------------
 
 JWT (**JSON Web Token**) is used for secure **authentication and authorization**.
@@ -3959,7 +4018,7 @@ app.get('/profile', authenticateJWT, (req, res) => {
 
 * * * * *
 
-**4\. How Do You Implement Rate Limiting in Express.js?**
+**65\. How Do You Implement Rate Limiting in Express.js?**
 ---------------------------------------------------------
 
 Rate limiting **prevents brute-force attacks and API abuse** by restricting the number of requests.
@@ -4016,7 +4075,7 @@ app.use(limiter);
 
 * * * * *
 
-**5\. What Are Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF)?**
+**66\. What Are Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF)?**
 ----------------------------------------------------------------------------------
 
 ### **❌ Cross-Site Scripting (XSS)**
@@ -4077,21 +4136,7 @@ app.use(csrf());
 
 * * * * *
 
-**🔥 Key Takeaways**
---------------------
-
-| **Security Risk** | **Solution** |
-| --- | --- |
-| **SQL Injection** | Use **parameterized queries, ORM** |
-| **NoSQL Injection** | Use **query sanitization** |
-| **XSS (Cross-Site Scripting)** | Sanitize inputs, use **CSP** |
-| **CSRF (Cross-Site Request Forgery)** | Use **CSRF tokens (`csurf`)** |
-| **JWT Security** | Use **HTTP-only cookies, short expiration** |
-| **Rate Limiting** | Use `express-rate-limit`, **Redis** for scaling |
-
-* * * * *
-
-**6\. How Do You Use Environment Variables Securely in Node.js?**
+**67\. How Do You Use Environment Variables Securely in Node.js?**
 =================================================================
 
 Environment variables are used to store sensitive data like **API keys, database credentials, and JWT secrets** outside the codebase. Keeping them secure prevents **accidental leaks and unauthorized access**.
@@ -4188,7 +4233,7 @@ const dbPass = process.env.DB_PASS;
 
 * * * * *
 
-**7\. Best Practices for Securing Sensitive Data in a Node.js Application**
+**68\. Best Practices for Securing Sensitive Data in a Node.js Application**
 ---------------------------------------------------------------------------
 
 | 🔒 **Security Concern** | ✅ **Best Practice** |
@@ -4228,7 +4273,7 @@ app.use((req, res, next) => {
 
 * * * * *
 
-**8\. How Do You Prevent Denial-of-Service (DoS) Attacks in Node.js?**
+**69\. How Do You Prevent Denial-of-Service (DoS) Attacks in Node.js?**
 ----------------------------------------------------------------------
 
 A **DoS attack** floods the server with requests, slowing or crashing the app.
@@ -4308,7 +4353,7 @@ app.use(speedLimiter);
 
 * * * * *
 
-**9\. How Do You Validate User Input in Node.js?**
+**70\. How Do You Validate User Input in Node.js?**
 --------------------------------------------------
 
 User input must be validated to prevent **injections, XSS, and other attacks**.
@@ -4364,7 +4409,7 @@ app.post('/register',
 
 * * * * *
 
-**10\. What Tools Can You Use to Scan for Vulnerabilities in a Node.js Project?**
+**71\. What Tools Can You Use to Scan for Vulnerabilities in a Node.js Project?**
 ---------------------------------------------------------------------------------
 
 ### **1️⃣ `npm audit` (Built-in Security Scanner)**
@@ -4434,22 +4479,9 @@ dependency-check --scan .
 
 * * * * *
 
-**🔑 Key Takeaways**
---------------------
-
-| 🔒 **Security Concern** | ✅ **Best Practice** |
-| --- | --- |
-| **Environment Variables** | Use `.env` files, cloud secrets |
-| **Sensitive Data** | Avoid hardcoding secrets, use **`bcrypt`** |
-| **DoS Attacks** | **Rate limiting**, `express-rate-limit` |
-| **Input Validation** | Use `joi`, `express-validator` |
-| **Security Scanning** | Use `npm audit`, `snyk`, `helmet` |
-
-* * * * *
-
 ***Testing & Debugging (10 Questions)***
 
-**1\. Best Practices for Testing Node.js Applications**
+**72\. Best Practices for Testing Node.js Applications**
 =======================================================
 
 Testing is crucial to ensure reliability, maintainability, and bug-free code in Node.js applications. Follow these best practices:
@@ -4468,7 +4500,7 @@ Testing is crucial to ensure reliability, maintainability, and bug-free code in 
 
 * * * * *
 
-**2\. How to Debug a Node.js Application?**
+**73\. How to Debug a Node.js Application?**
 ===========================================
 
 Debugging helps find and fix errors in Node.js applications.
@@ -4537,7 +4569,7 @@ node --inspect-brk app.js
 
 * * * * *
 
-**3\. Difference Between Unit Tests and Integration Tests**
+**74\. Difference Between Unit Tests and Integration Tests**
 ===========================================================
 
 | Feature | Unit Tests | Integration Tests |
@@ -4549,7 +4581,7 @@ node --inspect-brk app.js
 
 * * * * *
 
-**4\. Popular Testing Frameworks for Node.js**
+**75\. Popular Testing Frameworks for Node.js**
 ==============================================
 
 | **Testing Framework** | **Use Case** |
@@ -4562,7 +4594,7 @@ node --inspect-brk app.js
 
 * * * * *
 
-**5\. How to Use Jest for Testing Node.js Applications?**
+**76\. How to Use Jest for Testing Node.js Applications?**
 =========================================================
 
 ### **1️⃣ Install Jest**
@@ -4602,7 +4634,7 @@ npx jest
 
 * * * * *
 
-**6\. Mocking and Stubbing in Node.js Tests**
+**77\. Mocking and Stubbing in Node.js Tests**
 =============================================
 
 ### **1️⃣ Using Jest Mocks**
@@ -4632,7 +4664,7 @@ console.log(myFunction()); // 42
 
 * * * * *
 
-**7\. How to Test Asynchronous Functions in Node.js?**
+**78\. How to Test Asynchronous Functions in Node.js?**
 ======================================================
 
 Use Jest's async testing methods.
@@ -4661,7 +4693,7 @@ test('fetches data', (done) => {
 
 * * * * *
 
-**8\. How to Implement Logging in a Node.js Application?**
+**79\. How to Implement Logging in a Node.js Application?**
 ==========================================================
 
 ### **1️⃣ Using `console.log()` (Basic)**
@@ -4707,7 +4739,7 @@ app.use(morgan('combined'));
 
 * * * * *
 
-**9\. How to Write Efficient Error-Handling Tests?**
+**80\. How to Write Efficient Error-Handling Tests?**
 ====================================================
 
 ### **1️⃣ Use `try/catch` for Error Testing**
@@ -4730,7 +4762,7 @@ test('handles async errors', async () => {
 
 * * * * *
 
-**10\. Tools for Monitoring and Logging in Node.js**
+**81\. Tools for Monitoring and Logging in Node.js**
 ====================================================
 
 | **Tool** | **Purpose** |
