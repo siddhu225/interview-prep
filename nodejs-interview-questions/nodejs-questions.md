@@ -109,7 +109,6 @@ console.log(global);  // Prints Node.js global object
 // In Browser
 console.log(window);  // Prints the browser's global window object
 
-```
 
 * * * * *
 
