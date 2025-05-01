@@ -1,4 +1,4 @@
-```
+
 * * * * *
 
 ### **1\. What is Node.js, and how does it work?**
@@ -103,7 +103,6 @@ Node.js has several **powerful features** that make it a great choice for **s
 
 ✅ **Example: Global Object Difference**
 
-```
 // In Node.js
 console.log(global);  // Prints Node.js global object
 
