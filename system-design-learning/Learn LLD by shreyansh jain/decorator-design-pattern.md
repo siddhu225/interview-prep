@@ -1,4 +1,3 @@
-Certainly! Here's a detailed overview of the **Decorator Design Pattern** in JavaScript, tailored for interview preparation:
 
 ---
 
