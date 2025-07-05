@@ -1,3 +1,5 @@
+Here are detailed notes based **only on the content from the LogRocket article** you shared:
+**“SOLID principles in JavaScript” – [https://blog.logrocket.com/solid-principles-javascript/](https://blog.logrocket.com/solid-principles-javascript/)**
 
 ---
 
