@@ -1,112 +1,138 @@
-**System Design in a Hurry - Interview Prep Notes**
+Here are **clear, structured notes** from the “**System Design in a Hurry**” introduction by Hello Interview, summarizing all key points to help you revise efficiently:
 
 ---
 
-### 🔍 **Purpose of the Guide**
+## 🧠 **System Design in a Hurry – Key Notes**
 
-* Designed for last-minute preparation.
-* Based on thousands of mock interviews conducted by FAANG hiring managers.
-* Helps avoid common pitfalls and yellow flags.
-* Focused on practical, not overly academic content.
+### 🎯 **Purpose of the Guide**
 
----
-
-### ✏️ **How to Use the Guide**
-
-* Read in order; skip what you already know.
-* Pay close attention to "Tips and Warnings" scattered throughout.
-* If very short on time:
-
-  * Read the **Delivery Framework**
-  * Skim **Key Technologies**
-  * Focus on **Core Concepts**
+* Designed for **fast, last-minute preparation** for system design interviews.
+* Created by **FAANG hiring managers and engineers**.
+* Focused on the **most impactful 20%** of concepts to help avoid common failure points.
+* Ideal for candidates who are **short on time** but want high leverage preparation.
+* **Free forever**, with optional **premium content** for deeper dives.
 
 ---
 
-### ⚙️ **Types of System Design Interviews**
+### 📚 **How to Use the Guide**
 
-#### 1. **Product Design** (Most Common)
+* Covers **core concepts**, **key technologies**, **delivery framework**, and **interview strategy**.
+* Read **in order**; skip known sections.
+* Prioritize:
 
-* Design systems behind real-world products.
-* Ex: Chat App like Slack, Ride Sharing like Uber, Social Media like Facebook.
+  * **Delivery Framework**
+  * **Key Technologies (skim)**
+  * **Core Concepts**
+* Includes **Tips & Warnings** to avoid common interview red flags.
+
+---
+
+### 🧩 **Types of System Design Interviews**
+
+#### 1. **Product Design (Most Common)**
+
+* Design the system behind a product.
+* Use cases: Chat apps, ride-sharing, social media.
+* **Example Questions**:
+
+  * Design Uber backend
+  * Design Slack backend
+  * Design Facebook-like social network
 
 #### 2. **Infrastructure Design**
 
-* Focused on low-level system components (e.g., rate limiters, brokers).
-* Requires deep system knowledge (e.g., durability, consensus).
-* Ex: Design a rate limiter, key-value store, message broker.
+* Deeper in the tech stack.
+* Focus on systems like rate limiters or message brokers.
+* Emphasizes **system-level mastery**.
+* **Example Questions**:
+
+  * Design a rate limiter
+  * Design a message broker
+  * Design a key-value store
 
 #### 3. **Object-Oriented Design (Low-Level Design)**
 
-* Emphasizes class structures, SOLID principles.
-* Common at Amazon and similar companies.
-* Ex: Parking lot, vending machine, elevator system.
-* *Not covered deeply in this guide.*
+* Common in **Java-heavy companies** (e.g., Amazon).
+* Focuses on **class structure, SOLID principles**, etc.
+* Not covered in detail here – use **"Grokking the Low-Level Design Interview"**.
+* **Example Questions**:
+
+  * Parking lot system
+  * Vending machine
+  * Elevator control system
 
 #### 4. **Frontend Design**
 
-* Focused on designing large frontend systems.
-* Common in frontend-focused roles.
-* Ex: Video editor UI, spreadsheet UI.
-* *Not covered in detail here.*
+* Design architecture for **complex frontend apps**.
+* Common in **frontend-focused roles**.
+* Guide not suitable – use **Great Frontend** instead.
+* **Example Questions**:
+
+  * Spreadsheet application frontend
+  * Video editor frontend
 
 ---
 
-### ✍️ **Interview Assessment Areas**
+### 📝 **Interview Assessment Areas**
 
 #### 1. **Problem Navigation**
 
-* Break problems into components.
-* Prioritize critical components.
-* Avoid trivial distractions.
+* Break down complex problems into manageable parts.
+* Focus on high-impact areas.
+* **Common Failures**:
 
-**Common Fails**:
-
-* Missing requirements.
-* Over-focusing on trivial parts.
-* Stuck on a specific section.
+  * Poor requirement gathering.
+  * Focusing on trivial areas.
+  * Getting stuck and unable to move forward.
 
 #### 2. **High-Level Design**
 
-* Fit constituent components into a cohesive system.
+* Solve each piece of the problem with core concepts.
+* Ensure a **well-structured and scalable** system.
+* **Common Failures**:
 
-**Common Fails**:
-
-* Lack of understanding core concepts.
-* Ignoring scaling/performance.
-* Spaghetti design (unclear and unstructured).
+  * Weak understanding of core concepts.
+  * Ignoring scalability/performance.
+  * “Spaghetti design” (disorganized system).
 
 #### 3. **Technical Excellence**
 
-* Use of current best practices and tech.
+* Knowledge of **technologies**, **best practices**, and **design patterns**.
+* Must know **when and how** to use specific tools or approaches.
+* **Common Failures**:
 
-**Common Fails**:
+  * Unaware of available tech.
+  * Can't apply tech to real scenarios.
+  * Miss standard patterns or practices.
 
-* Not knowing modern tech.
-* Not knowing how to apply known tech.
-* Missing known patterns.
+#### 4. **Communication & Collaboration**
 
-#### 4. **Communication and Collaboration**
+* Show you're a **good teammate**.
+* Clearly explain ideas, adapt to feedback, and work with interviewer.
+* **Common Failures**:
 
-* Explain ideas clearly.
-* Work well with interviewer.
-
-**Common Fails**:
-
-* Inability to explain ideas.
-* Defensiveness.
-* Ignoring feedback.
-
----
-
-### ⚡ **Tips to Succeed**
-
-* Be structured in your response.
-* Communicate clearly, collaborate openly.
-* Stay focused on critical system pieces.
-* Cover functional + non-functional requirements.
-* Demonstrate trade-offs and decisions.
+  * Poor communication of ideas.
+  * Defensive behavior.
+  * Lack of collaboration.
 
 ---
 
-Would you like a follow-up section with a Delivery Framework or sample system design using this structure?
+### 💡 Key Advice
+
+* Your **main goal**: Give the interviewer enough **confidence** to advocate for your hire.
+* **Lack of structure** is the top reason for failure.
+* Follow the **Delivery Framework** to stay organized.
+
+---
+
+### ✅ Summary Checklist
+
+* [ ] Understand the **4 interview types**.
+* [ ] Focus on **Product & Infrastructure Design** for this guide.
+* [ ] Master the **Delivery Framework** and **Core Concepts**.
+* [ ] Practice breaking down problems and structuring answers.
+* [ ] Communicate clearly and collaborate effectively.
+
+---
+
+Whenever you're ready to move on, share the next section or URL and I’ll prep notes just like this.

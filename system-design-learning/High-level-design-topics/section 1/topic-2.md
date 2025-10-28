@@ -1,137 +1,229 @@
-Here's a more detailed breakdown of the System Design Delivery Framework, expanding on each step:
-
-### System Design Delivery Framework: Detailed Notes
-
-This framework provides a structured and efficient way to approach system design interviews, ensuring you cover all critical aspects and effectively communicate your design.
+Absolutely! Below is a **comprehensive and structured set of detailed notes** on the **System Design Interview Delivery Framework** from the Hello Interview guide — broken into actionable steps with tips, pitfalls, and example content.
 
 ---
 
-#### 1. Requirements (Approx. 5 minutes)
-
-This initial phase is crucial for understanding the problem space and setting the scope of your design.
-
-* **Functional Requirements (FRs):** These define *what* the system must do. They are the core features and functionalities that users will interact with directly.
-    * **Examples:**
-        * "Users should be able to upload photos."
-        * "Customers can search for products by name or category."
-        * "The system must send notifications to users."
-        * "Admins should be able to manage user accounts."
-    * **Tip:** Think about the different types of users and their primary interactions with the system.
-
-* **Non-functional Requirements (NFRs):** These define *how well* the system performs its functions. They are critical for understanding the constraints and quality attributes of the system.
-    * **Key NFRs to discuss:**
-        * **Scalability:** How does the system handle increasing load (users, data)?
-        * **Latency:** How quickly does the system respond to requests? (e.g., "API response time should be under 200ms").
-        * **Availability:** What percentage of the time is the system operational? (e.g., "99.99% uptime").
-        * **Durability:** How reliably is data stored and retrieved? (e.g., data persistence even after failures).
-        * **Consistency:** How is data consistency maintained across distributed systems? (e.g., eventual vs. strong consistency).
-        * **Security:** Protection against unauthorized access, data breaches, etc. (e.g., authentication, authorization, encryption).
-        * **Fault Tolerance/Resilience:** How does the system behave when parts of it fail? (e.g., graceful degradation, self-healing).
-        * **Maintainability/Operability:** Ease of managing, monitoring, and updating the system.
-        * **Cost:** Budget constraints for infrastructure.
-        * **Compliance:** Meeting industry standards or regulations (e.g., GDPR, HIPAA).
-    * **Tip:** Prioritize the most critical NFRs based on the problem statement and ask clarifying questions to the interviewer.
-
-* **Capacity Estimation (Optional):**
-    * Perform this *only if* it directly influences your design decisions (e.g., needing to choose a specific database type due to high read/write volume or storage needs).
-    * **What to estimate:** Users (DAU/MAU), QPS (Queries Per Second), Storage needs (data per user, total data), Network bandwidth.
-    * **Example:** "If we have 10 million users, and each uploads 5 photos per month, averaging 1MB per photo, that's 50 TB of new data per month."
+## 🔧 SYSTEM DESIGN INTERVIEW FRAMEWORK — DETAILED NOTES
 
 ---
 
-#### 2. Core Entities (Approx. 2 minutes)
+### **1. Requirements (First ~5 minutes)**
 
-Identify the fundamental "nouns" or resources that your system will manage or operate on. These often translate directly to database tables or core data structures.
+#### ✅ 1.1 Functional Requirements (What the system should do)
 
-* **What they are:** The main objects or concepts central to the system's function.
-* **Examples:**
-    * For an e-commerce system: `User`, `Product`, `Order`, `Payment`.
-    * For a social media platform: `User`, `Post`, `Comment`, `Like`.
-    * For a ride-sharing app: `User`, `Driver`, `Ride`, `Vehicle`.
-* **Tip:** Focus on simplicity and identify only the most critical entities at this stage.
+* Start by identifying the **primary features** based on the problem.
+* Ask clarifying questions:
+  *“Should users be able to search?”*
+  *“Do we need real-time updates?”*
+* Prioritize the top **3–4 core features**. Don’t list too many.
 
----
+**Example** (Design Twitter):
 
-#### 3. API or System Interface (Approx. 5 minutes)
+* Users can post tweets.
+* Users can follow/unfollow others.
+* Users can see a feed of tweets from followed users.
 
-Define how external clients or other services will interact with your system. A well-defined API acts as a contract.
+#### ✅ 1.2 Non-Functional Requirements (Qualities of the system)
 
-* **Typical Approach:** RESTful API endpoints are commonly used.
-* **What to define:**
-    * **Endpoints:** The URLs for specific resources (e.g., `/users`, `/products/{id}`).
-    * **HTTP Methods:** `GET` (retrieve), `POST` (create), `PUT`/`PATCH` (update), `DELETE` (remove).
-    * **Request/Response Formats:** What data goes in and what comes out (e.g., JSON payload structure for creating a user, or the data returned when fetching a product).
-    * **Authentication/Authorization:** How users/services prove their identity and what permissions they have (e.g., API keys, OAuth tokens).
-* **Example (User Management API):**
-    * `POST /users` (Create User): Request body: `{ "name": "...", "email": "..." }`
-    * `GET /users/{id}` (Get User by ID): Response body: `{ "id": "...", "name": "...", "email": "..." }`
-    * `PUT /users/{id}` (Update User): Request body: `{ "name": "..." }`
-* **Tip:** This step forces you to think about how your system will be consumed and helps clarify the boundaries of your service.
+Use the **FCC + SLEDS** or **“Furry Cats Climb Steep Ledges Every Day Securely”** acronym:
 
----
+| Acronym | NFR                     | Guiding Question                             |
+| ------- | ----------------------- | -------------------------------------------- |
+| F       | Fault Tolerance         | How does it handle failure?                  |
+| C       | CAP Theorem             | Prioritize Consistency or Availability?      |
+| C       | Compliance              | Are there legal/data policies (e.g., GDPR)?  |
+| S       | Scalability             | Can it handle growth in users/data/traffic?  |
+| L       | Latency                 | What’s the acceptable response time?         |
+| E       | Environment Constraints | Are there device/bandwidth constraints?      |
+| D       | Durability              | Is data loss acceptable?                     |
+| S       | Security                | Is the data encrypted and access controlled? |
 
-#### 4. Data Flow (Optional - Approx. 5 minutes)
+**Example (Twitter)**:
 
-This step is particularly relevant for data-intensive systems, real-time processing, or systems with complex workflows.
-
-* **When to use:** If the primary challenge or a significant aspect of the system involves how data moves through various stages, transformations, or asynchronous processes.
-* **What to describe:**
-    * **Ingestion:** How data enters the system.
-    * **Processing:** What transformations or computations happen to the data.
-    * **Storage:** Where the data is stored at different stages.
-    * **Output/Consumption:** How processed data is consumed by other services or users.
-    * **Asynchronous vs. Synchronous:** Highlight if queues or messaging systems are involved.
-* **Example (Image Processing Pipeline):**
-    1.  User uploads image (API).
-    2.  Image stored in Blob Storage.
-    3.  Message sent to Queue (e.g., Kafka/SQS).
-    4.  Worker service consumes message, downloads image.
-    5.  Worker processes image (e.g., thumbnail generation, face detection).
-    6.  Processed images/metadata stored in new location/database.
-    7.  Notification sent to user.
-* **Tip:** Use this to demonstrate understanding of event-driven architectures, messaging systems, and eventual consistency.
+* Highly available, prefer availability over consistency.
+* Latency < 200ms for feed rendering.
+* Scale to 100M+ DAU.
+* Secure user authentication and tweet data.
 
 ---
 
-#### 5. High-Level Design (Approx. 10-15 minutes)
+### **2. Capacity Estimation (Optional)**
 
-This is where you draw the main components of your system and illustrate how they interact to satisfy the core functional requirements.
+#### ✅ When to do it:
 
-* **Focus:** Start with the most critical components required for the core functionality. Don't get bogged down in too much detail initially.
-* **Typical Components to Draw:**
-    * **Clients:** Web, Mobile apps.
-    * **Load Balancer:** Distributes traffic.
-    * **Web Servers/API Gateway:** Handle incoming requests.
-    * **Application Servers/Microservices:** Business logic (e.g., User Service, Product Service, Order Service).
-    * **Databases:** Relational (SQL) or Non-relational (NoSQL - Key-Value, Document, Columnar, Graph).
-    * **Caching Layer:** Redis, Memcached.
-    * **Message Queues:** Kafka, RabbitMQ, SQS.
-    * **Storage:** S3 (object storage), EBS (block storage).
-    * **DNS:** Domain Name System.
-    * **CDN:** Content Delivery Network.
-* **Interaction Flow:** Show arrows indicating data flow between components.
-* **Example:** User (Client) -> DNS -> Load Balancer -> Web Server -> Application Server -> Database.
-* **Tip:** Clearly label each component and briefly explain its role. Prioritize drawing the components that fulfill the main use cases identified in the requirements.
+* Only **if it drives design choices**, like:
 
----
+  * In-memory vs persistent storage
+  * Whether to shard data or not
+  * Using queues vs direct writes
 
-#### 6. Deep Dives (Approx. 10 minutes)
+#### ❌ When to skip:
 
-This phase allows you to refine specific parts of your design, address complexities, and show your understanding of trade-offs and edge cases. This is often driven by interviewer questions.
+* Don’t waste time estimating DAU/QPS if it doesn’t change your architecture.
+* If interviewer wants it, do it **with purpose**.
 
-* **Common Deep Dive Areas:**
-    * **Database Schema/Choice:** Detail table design, indexing strategies, or reasons for choosing a specific NoSQL database. Discuss consistency models.
-    * **API Design Details:** Error handling, versioning, rate limiting.
-    * **Scaling Strategies:** How to handle increased load for a specific component (e.g., database sharding, read replicas, horizontal scaling of application servers, auto-scaling groups).
-    * **Specific Component Design:** How would you design the "Notification Service" or the "Search Engine" in detail?
-    * **Concurrency/Consistency Issues:** How to handle concurrent writes, distributed transactions.
-    * **Fault Tolerance/Reliability:** How to ensure the system remains available during failures (e.g., retries, circuit breakers, redundancy, leader election).
-    * **Security Considerations:** Authentication protocols, authorization mechanisms, data encryption at rest and in transit.
-    * **Monitoring and Logging:** How to observe system health and debug issues.
-    * **Edge Cases & Failure Scenarios:** What happens if a service goes down, network partitions, data corruption.
-    * **Trade-offs:** Discuss pros and cons of different design choices (e.g., strong consistency vs. eventual consistency, relational vs. NoSQL, synchronous vs. asynchronous).
-* **Tip:** Be prepared to justify your design choices and discuss alternatives. This is where you demonstrate your depth of knowledge and problem-solving skills.
+**Example**:
+Design Trending Topics (TopK)
+
+* Estimate number of tweets per second (say 100K QPS)
+* Helps choose between heap-in-memory or distributed counter
 
 ---
 
-This detailed breakdown should provide a more comprehensive set of notes for your system design interview preparation, ensuring you cover all the key aspects of the Delivery Framework.
+### **3. Core Entities (2–3 minutes)**
+
+#### ✅ Purpose:
+
+* Capture key **data objects/entities** the system operates on.
+
+#### ✅ How to identify:
+
+* Ask: “What are the nouns in this system?”
+* Who are the actors? What resources do they act upon?
+
+#### ✅ Example (Twitter):
+
+* `User`: id, name, handle
+* `Tweet`: id, user_id, text, timestamp
+* `Follow`: follower_id, followee_id
+
+Start simple — evolve as the design grows.
+
+---
+
+### **4. API or System Interface (5 minutes)**
+
+#### ✅ Define how users or services interact with your system
+
+* Use **REST** by default (safe choice).
+* Consider **GraphQL** for dynamic querying by clients.
+* Use **gRPC** for service-to-service comms in microservices.
+
+**REST Example (Twitter):**
+
+```http
+POST /v1/tweets
+{
+  "text": "Hello world"
+}
+
+GET /v1/feed  → returns list of tweets
+
+POST /v1/users/{userId}/follow
+{
+  "target_user_id": 123
+}
+```
+
+#### 🔐 Tips:
+
+* Don’t pass sensitive data in body (e.g., user_id) — derive from auth token.
+* Follow REST naming conventions (`/tweets`, not `/tweet`).
+
+---
+
+### **5. (Optional) Data Flow (~5 minutes)**
+
+Useful for systems with **ETL**, streaming, or **pipelines**.
+
+#### Example: Web Crawler
+
+1. Fetch seed URLs
+2. Parse HTML
+3. Extract links
+4. Store content & metadata
+5. Repeat
+
+Use this to explain the **flow of data/events** through the system.
+
+---
+
+### **6. High-Level Design (10–15 minutes)**
+
+#### ✅ Your architecture diagram (boxes & arrows)
+
+* Start from **API Gateway** or client → backend services → databases, caches, queues
+* Each API maps to components that handle:
+
+  * **Routing**
+  * **Business logic**
+  * **Persistence**
+  * **Asynchronous work (queues)**
+
+#### ✅ Tips:
+
+* Start simple, then layer complexity.
+* Focus on **data flow** per request — walk through how a write/read happens.
+* Mention:
+
+  * Databases (SQL vs NoSQL)
+  * Caches (Redis, Memcached)
+  * Indexing
+  * Load Balancing
+  * Microservices (if any)
+
+#### Example (Design Twitter):
+
+* **Write Path**:
+  Client → API Gateway → Tweet Service → DB
+  → Fanout service (for updating followers’ feed, async)
+
+* **Read Path**:
+  Client → API Gateway → Feed Service
+  → Redis Cache or precomputed feed → DB fallback
+
+---
+
+### **7. Deep Dives (Last 10 minutes)**
+
+#### ✅ Purpose:
+
+* **Stress-test** your design.
+* Address trade-offs, scalability, bottlenecks.
+* Show how your system meets **non-functional requirements**.
+
+#### ✅ What to focus on:
+
+* **Caching strategy** (What to cache? How to invalidate?)
+* **Scalability** (Horizontal vs vertical scaling, sharding)
+* **Feed Generation** (fanout-on-read vs fanout-on-write)
+* **Database choices** (SQL vs NoSQL, eventual consistency)
+* **Rate limiting, load shedding**
+* **Monitoring & Observability**
+* **Security: auth, encryption at rest/in-transit**
+
+#### 💬 Example prompts to self-start:
+
+> “To meet the 100M DAU scalability target, I’d shard tweets by user ID...”
+
+> “To reduce feed latency, I’ll cache the timeline in Redis and update it async on new tweets.”
+
+> “For durability, I’ll persist all tweets to S3 before acknowledging writes.”
+
+---
+
+## 🛑 Common Mistakes to Avoid
+
+| Mistake                                | Why it hurts                                    |
+| -------------------------------------- | ----------------------------------------------- |
+| Listing 10+ functional requirements    | You won’t get through even 3 in time            |
+| Starting with tech before requirements | You’re building a solution without a problem    |
+| Deep diving too early                  | You won’t finish end-to-end, which matters most |
+| Ignoring API design                    | That’s the contract your system must satisfy    |
+| Not discussing monitoring or metrics   | Shows immaturity in production-readiness        |
+
+---
+
+## 🧠 Final Thoughts
+
+* Think like a **builder** and a **scaler**.
+* Be **collaborative** — ask interviewer what assumptions are okay.
+* Be **intentional** — only do math/design trade-offs when they matter.
+* Be **adaptable** — some interviewers go deep early, be ready to adjust.
+
+---
+
+Would you like a **notion template**, **printable checklist**, or a **system design template** for whiteboarding practice?
+
+Or, we can go through a **mock interview** (e.g., Design Instagram Stories) step-by-step using this framework.
+
+Let me know how you'd like to proceed.
