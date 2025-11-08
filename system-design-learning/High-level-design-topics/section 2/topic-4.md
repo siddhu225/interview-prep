@@ -1,114 +1,509 @@
-I have successfully browsed the URL and retrieved the content on API Design. I will now prepare detailed notes based on this content, following the established format.
+Got it — you want me to **restart the API Design section from the beginning**, but in the **same rich, conceptual, interview-sharp style** as the Networking notes. Not bullet-only, not too short, not flowery.
+
+**This is the rewritten, deeper, structured version — starting fresh.**
 
 ---
 
-### API Design for System Design Interviews
+# **API DESIGN (Deep System Design Notes)**
 
-API (Application Programming Interface) design is a critical aspect of system design, defining how different components or services interact. In interviews, the goal isn't perfection but demonstrating a solid understanding of design principles and the ability to choose appropriate protocols and patterns.
+In system design interviews, after identifying the **core problem and components**, the next step is defining **how clients interact with your system**.
+This is the **API design layer**, and even though the step is short (usually 2–5 minutes), it signals **whether you know how to design clean, scalable interfaces**.
 
----
+Most interviewers **do not** expect API perfection.
+They want to see:
 
-#### 1. Overview of API Protocols
+1. You can identify **proper resources**
+2. You use **consistent URL and method patterns**
+3. You choose **REST / GraphQL / gRPC** for a **reason**, not randomly
+4. You understand **pagination, versioning, security, and rate limiting**
 
-The article discusses three primary API protocols/paradigms, each suited for different communication needs:
-
-* **REST (Representational State Transfer):**
-    * **Nature:** The **default choice** for most web services and public APIs. It leverages standard HTTP methods and principles.
-    * **Strengths:** Simple, widely understood, uses standard HTTP infrastructure (caching, proxies), highly scalable due to its stateless nature.
-    * **Use Cases:** General web services, public APIs, client-server communication where a standardized, resource-oriented approach is desired.
-* **GraphQL:**
-    * **Nature:** A query language for APIs that allows clients to request *exactly* the data they need.
-    * **Strengths:** Highly flexible data fetching, solves "under-fetching" (multiple requests for a single view) and "over-fetching" (receiving more data than needed) issues.
-    * **Use Cases:** Mobile applications (where bandwidth is limited and data efficiency is crucial), diverse clients with varying data requirements, systems with rapidly evolving data schemas.
-* **RPC (Remote Procedure Call):**
-    * **Nature:** Allows a client to execute a function or procedure on a remote server as if it were a local call. Examples include gRPC (using Protocol Buffers and HTTP/2).
-    * **Strengths:** High performance, strongly typed (with schema definitions), efficient for internal communication due to binary serialization.
-    * **Use Cases:** High-performance internal service-to-service communication, especially in **microservices architectures**, where efficiency and strict contracts are prioritized.
+Your goal is to show that **your API design scales**, is **easy to extend**, and is **simple to understand**.
 
 ---
 
-#### 2. Key Aspects of REST API Design (The Default Focus)
+# **1. Choosing API Type (REST vs GraphQL vs gRPC)**
 
-Given REST's prevalence, the article details several important considerations for designing RESTful APIs:
+The API type depends on:
 
-* **2.1. Resource Modeling:**
-    * **Principle:** Think in terms of **resources** (nouns), not actions (verbs). Resources represent entities in your system.
-    * **Naming Convention:** Use **plural nouns** for resource names in URLs (e.g., `/users`, `/products`, `/events`). This represents a collection of resources.
-    * **Example:** For events, the collection would be `/events`, and a specific event would be `/events/{eventId}`.
+* Who is calling your API (client/browser/mobile/service)
+* The amount and shape of data needed
+* Performance requirements
 
-* **2.2. HTTP Methods (Verbs) and Idempotency:**
-    * **Principle:** Use standard HTTP methods to represent CRUD (Create, Read, Update, Delete) operations on resources.
-    * **`GET`:**
-        * **Purpose:** Retrieve a resource or collection of resources.
-        * **Idempotency:** **Idempotent**. Calling `GET` multiple times with the same parameters will always produce the same result (no side effects on the server state).
-    * **`POST`:**
-        * **Purpose:** Create a new resource within a collection.
-        * **Idempotency:** **Not Idempotent**. Calling `POST` multiple times with the same payload will typically create multiple new resources.
-    * **`PUT`:**
-        * **Purpose:** **Completely replace** an existing resource.
-        * **Idempotency:** **Idempotent**. Calling `PUT` multiple times with the same payload to the same resource ID will result in the same state (the resource is replaced with that exact representation each time).
-    * **`PATCH`:**
-        * **Purpose:** **Partially update** an existing resource (e.g., update only a few fields).
-        * **Idempotency:** **Not inherently Idempotent** (depends on implementation). If a `PATCH` operation depends on the current state (e.g., incrementing a counter), repeated calls might yield different results. However, if it's updating specific fields to a set value, it can be designed to be idempotent.
-    * **`DELETE`:**
-        * **Purpose:** Remove a specified resource.
-        * **Idempotency:** **Idempotent**. Calling `DELETE` multiple times on the same resource ID will result in the same state (the resource is eventually removed, subsequent deletes will still indicate it's gone).
+### **REST (Default Choice)**
 
-* **2.3. Passing Data in API Requests:**
-    * **Path Parameters:**
-        * **Purpose:** Used for required identifiers of a specific resource or sub-resource.
-        * **Placement:** Part of the URL path (e.g., `/users/{id}`, `/posts/{postId}/comments`).
-    * **Query Parameters:**
-        * **Purpose:** Used for optional filtering, sorting, pagination, or other non-identifying parameters.
-        * **Placement:** Appended to the URL after a `?` (e.g., `/events?location=NYC&date=today`).
-    * **Request Body:**
-        * **Purpose:** Used for sending complex data structures, especially for `POST` and `PUT` (and sometimes `PATCH`) requests.
-        * **Format:** Typically **JSON**.
-        * **Example:** For a `POST /users` request, the request body would contain the new user's details (e.g., `{"name": "Alice", "email": "alice@example.com"}`).
+**What it does:**
+Represents system entities as **resources**, accessed using standard HTTP verbs.
+
+**Why it’s used:**
+
+* Maps cleanly to CRUD logic
+* Easy to reason about
+* Universal browser/mobile/tool support
+
+**When to choose it:**
+→ **Almost always**, unless there is a specific reason not to.
 
 ---
 
-#### 3. Common API Patterns
+### **GraphQL**
 
-* **3.1. Pagination:** Essential for APIs returning large collections of resources.
-    * **Offset-based Pagination:**
-        * **Mechanism:** Uses `offset` (number of items to skip) and `limit` (number of items to return) query parameters (e.g., `/items?offset=10&limit=5`).
-        * **Pros:** Simple to implement, allows jumping to any "page."
-        * **Cons:** Can be inefficient for very deep pages (database has to skip many rows), prone to inconsistencies if data is added/deleted during pagination (e.g., items shifting pages).
-    * **Cursor-based Pagination:**
-        * **Mechanism:** Uses a `cursor` (an opaque identifier, often based on a timestamp or unique ID of the last item from the previous page) to fetch the next set of results (e.g., `/items?since_id=12345&limit=5` or `/items?after_cursor=xyz`).
-        * **Pros:** More efficient for large datasets (database doesn't skip rows), more resilient to data changes (consistent results across pages).
-        * **Cons:** Cannot easily jump to arbitrary pages, requires a consistent sort order.
+**What problem it solves:**
+Avoids **over-fetching** (too much data returned) and **under-fetching** (needing multiple requests).
 
-* **3.2. Versioning:** How to manage changes to your API over time without breaking existing clients.
-    * **URL Versioning (Most Common):**
-        * **Mechanism:** Include the API version directly in the URL path (e.g., `/v1/users`, `/v2/users`).
-        * **Pros:** Simple, explicit, clear what version is being called, easy to route.
-        * **Cons:** Requires changing URLs for clients, can lead to URL proliferation.
-    * **Header Versioning:** Pass the version in a custom HTTP header (e.g., `X-Api-Version: 1`).
-    * **Accept Header Versioning:** Use the `Accept` header (e.g., `Accept: application/vnd.myapi.v1+json`).
+Example:
+
+* Mobile app only needs: event name + date
+* Web dashboard needs: full venue, pricing, sections, availability
+
+With REST → need multiple endpoints or oversized responses
+With GraphQL → **client chooses** exactly what it needs.
+
+**When to choose (interview signal):**
+
+* Different clients need **different slices** of data
+* You hear the words “avoid over-fetching / under-fetching”
+* Rapid UI iteration, especially **mobile**
+
+---
+
+### **gRPC (RPC)**
+
+**What problem it solves:**
+High performance **internal service-to-service communication**.
+
+Uses:
+
+* **HTTP/2** (streaming)
+* **Protobuf** (binary, compact)
+
+**Why it matters:**
+REST is too slow and heavy for microservices calling each other frequently.
+
+**When to choose:**
+
+* Internal **microservice architecture**
+* High throughput / low latency paths
+* Polyglot (multiple languages in backend)
+
+**Not used for:** browser/public clients.
 
 ---
 
-#### 4. Security Considerations
+# **2. REST API Design (Core Interview Focus)**
 
-API design must incorporate robust security measures:
+## **Resource Modeling**
 
-* **4.1. Authentication:** Verifying the identity of the client or user making the API request.
-    * **API Keys:**
-        * **Mechanism:** A secret token typically passed in a header or query parameter.
-        * **Use Cases:** Common for **server-to-server communication**, third-party application access (where a specific user isn't involved).
-        * **Security:** Should be treated as secrets, rotated, and have appropriate permissions.
-    * **JWT (JSON Web Tokens):**
-        * **Mechanism:** A compact, URL-safe means of representing claims to be transferred between two parties. Tokens are typically signed (and sometimes encrypted) and contain information about the user and their permissions.
-        * **Use Cases:** Primarily for **user sessions** in web and mobile applications. After authentication, the client receives a JWT and sends it with subsequent requests in an `Authorization` header.
-        * **Security:** Tokens are stateless on the server, but proper signing, expiration, and invalidation strategies are crucial.
-* **4.2. Authorization:** Determining what an authenticated client/user is *allowed* to do.
-    * **Role-Based Access Control (RBAC):** Assigning permissions based on predefined roles (e.g., `admin`, `editor`, `viewer`). A user with the `admin` role might have permission to delete resources, while a `viewer` can only read.
-* **4.3. Rate Limiting:**
-    * **Purpose:** To prevent abuse, overload, and malicious attacks (like DDoS) by limiting the number of API requests a client can make within a given time period.
-    * **Mechanism:** The API gateway or a dedicated rate-limiting service tracks requests per user/IP/API key and blocks or delays requests once a threshold is met.
-    * **Response:** Typically returns a `429 Too Many Requests` HTTP status code.
+Identify **nouns**, not actions.
+
+For a ticketing system:
+
+* Event
+* Venue
+* Ticket
+* Booking
+
+These become your resource endpoints:
+
+```
+GET /events
+GET /events/{id}
+POST /events/{id}/bookings
+GET /bookings/{id}
+```
+
+### **Key Principle**
+
+> **If you are naming endpoints after verbs, you're doing it wrong.**
+
+❌ `POST /createBooking`
+✅ `POST /events/{id}/bookings`
 
 ---
-By demonstrating an understanding of these API design principles, protocols, and patterns, candidates can showcase strong engineering judgment in system design interviews.
+
+## **3. HTTP Methods & Idempotency**
+
+| Method     | Meaning                | Idempotent? | Example                    | Notes                      |
+| ---------- | ---------------------- | ----------- | -------------------------- | -------------------------- |
+| **GET**    | Retrieve data          | ✅ Yes       | `GET /events/42`           | Never changes state        |
+| **POST**   | Create resource        | ❌ No        | `POST /events/42/bookings` | Retry can cause duplicates |
+| **PUT**    | Replace resource fully | ✅ Yes       | `PUT /users/17`            | Client sends full object   |
+| **PATCH**  | Partial update         | ✅ Yes       | `PATCH /users/17`          | More efficient than PUT    |
+| **DELETE** | Remove resource        | ✅ Yes       | `DELETE /bookings/88`      | Safe to retry              |
+
+### **Interview Insight**
+
+> **POST is not idempotent, so you must consider retry safety.**
+
+This leads to:
+
+* **Idempotency keys** for payment-like operations (covered soon).
+
+---
+
+## **4. How to Pass Data in REST APIs**
+
+| Where Data Goes  | Used For                             | Example                       | Why                     |
+| ---------------- | ------------------------------------ | ----------------------------- | ----------------------- |
+| **Path Param**   | Identifies a specific resource       | `/events/42`                  | Required identifier     |
+| **Query Param**  | Filtering / searching / toggles      | `/events?city=NYC&date=today` | Optional refinements    |
+| **Request Body** | Create/update data & object payloads | `{ "tickets": [...] }`        | Complex structured data |
+
+### Example Combining Them
+
+```
+POST /events/42/bookings?send_confirmation=true
+{
+  "tickets": [
+    { "section": "VIP", "quantity": 2 }
+  ],
+  "payment_method": "credit_card"
+}
+```
+
+---
+
+## **5. API Responses**
+
+| Status Code                   | Meaning                   | When Used                |
+| ----------------------------- | ------------------------- | ------------------------ |
+| **200 OK**                    | Request successful        | GET                      |
+| **201 Created**               | Resource created          | POST                     |
+| **400 Bad Request**           | Client sent invalid data  | Validation errors        |
+| **401 Unauthorized**          | Not logged in             | Missing/expired auth     |
+| **403 Forbidden**             | Logged in but not allowed | Role or permission issue |
+| **404 Not Found**             | Resource missing          | Wrong ID                 |
+| **500 Internal Server Error** | Something broke           | Server failure           |
+
+---
+
+# **6. Pagination (Expanded Detail)**
+
+## **Why Pagination Exists**
+
+Some API responses can be **very large**.
+Clients do not need all records at once.
+
+Pagination:
+
+* Reduces **latency**
+* Reduces **DB load**
+* Reduces **network transfer size**
+
+---
+
+## **Offset-Based Pagination**
+
+```
+GET /events?offset=60&limit=20
+```
+
+**Good for:**
+
+* Admin dashboards
+* Simple browsing UI
+
+**Problem:**
+If data changes while paginating → **rows shift**, causing:
+
+* Duplicates
+* Skipped rows
+
+Also **slow for large tables** (database must count + skip rows).
+
+---
+
+## **Cursor-Based Pagination (Preferred at Scale)**
+
+Instead of numbers, it uses **a pointer** to last record returned.
+
+```
+GET /events?cursor=evt_987xyz&limit=20
+```
+
+The API returns:
+
+```
+{
+  "events": [...],
+  "next_cursor": "evt_987xyz"
+}
+```
+
+**Advantages:**
+
+* Stable while data changes
+* Efficient for large tables
+* Natural fit for **time-sorted or ID-sorted** data
+
+**When used in interviews:**
+→ When dataset is **very large** or **real-time changing**, say:
+
+> “I’ll use cursor-based pagination to ensure stability and efficiency.”
+
+---
+
+# **7. Rate Limiting & Throttling (Highly Interview-Relevant)**
+
+## **Why It Exists**
+
+To prevent:
+
+* Abuse (bot floods, DDOS behavior)
+* Accidental overload (buggy client loops)
+* Cost escalation (API calls often cost money)
+
+Rate limiting protects your system.
+
+---
+
+## **Two Key Concepts**
+
+| Concept           | Meaning                                               | Example                            |
+| ----------------- | ----------------------------------------------------- | ---------------------------------- |
+| **Rate Limiting** | Max operations allowed in a time window               | “100 requests per minute per user” |
+| **Throttling**    | Slowing down / delaying requests instead of rejecting | Queue + gradual release            |
+
+---
+
+## **How Rate Limiting Is Implemented**
+
+### **Token Bucket (Most Common — Mention in Interview)**
+
+* Bucket holds **tokens**
+* Each request **consumes** one token
+* Tokens refill at fixed rate
+* If bucket empty → reject or queue request
+
+This supports **bursts** but protects sustained overload.
+
+---
+
+### **Where Rate Limiting Is Applied**
+
+| Layer                                 | Example                               | Why                                   |
+| ------------------------------------- | ------------------------------------- | ------------------------------------- |
+| **API Gateway / CDN / Load Balancer** | CloudFront, NGINX, Envoy              | Stops traffic before reaching backend |
+| **Application Layer**                 | Express middleware / Django decorator | Fine-grained controls                 |
+| **Database Query Layer**              | Query blocker                         | Protects DB from overload             |
+
+---
+
+## **Return Code**
+
+When limit exceeded, return:
+
+```
+429 Too Many Requests
+Retry-After: 30
+```
+
+---
+
+## **Interview Sentence (Use This Exactly)**
+
+> “To prevent abuse and ensure fairness, I will add rate limiting using a token bucket algorithm at the API gateway. When the limit is exceeded, we return HTTP 429 with a Retry-After header. For critical operations, we include idempotency keys to ensure retries don’t duplicate state changes.”
+
+Great — continuing in the **same depth + clarity style** with:
+
+**(1) Authentication & Authorization**
+**(2) API Versioning Strategies**
+
+---
+
+# **1. Authentication & Authorization (In-Depth)**
+
+Security is a required piece of API design.
+Even if the interviewer doesn’t explicitly ask, **mentioning auth shows maturity**.
+
+There are **two separate concerns**:
+
+| Concept            | Meaning                                   | Example                              |
+| ------------------ | ----------------------------------------- | ------------------------------------ |
+| **Authentication** | Who are you? (identity)                   | Login, session, JWT                  |
+| **Authorization**  | What are you allowed to do? (permissions) | Customer cannot view admin dashboard |
+
+---
+
+## **A) Authentication Methods**
+
+### **i) JWT (JSON Web Tokens)** — *Most common for user-facing apps*
+
+**What Problem It Solves:**
+Avoids server-side session storage. Each request carries its own authentication info.
+
+**How It Works:**
+
+* User logs in → server creates JWT containing user ID + role + expiration
+* JWT is **signed** (cannot be tampered with)
+* Client sends the JWT in the `Authorization: Bearer token` header
+* Server validates signature → trusts the request
+
+**Example JWT Payload** *(readable part — before signature)*:
+
+```json
+{
+  "user_id": "12345",
+  "email": "john@site.com",
+  "role": "customer",
+  "exp": 1735689600
+}
+```
+
+### **Why It’s Good in Distributed Systems**
+
+> Any microservice can validate the token **without calling the auth service**.
+
+This reduces latency and removes bottlenecks.
+
+### **Interview Use Sentence**
+
+> “We’ll use JWT for stateless user authentication. The server validates the token signature on each request — no server-side session store required.”
+
+---
+
+### **ii) API Keys** — *Used for service-to-service communication*
+
+**What Problem It Solves:**
+Machines (cron jobs, backend services) need simple authentication not tied to individual users.
+
+**Characteristics**
+
+* Long, random key generated by backend
+* Sent in request header:
+
+```
+Authorization: Bearer API_KEY_HERE
+```
+
+* Stored in DB and validated on each request
+
+**Use Case Examples**
+
+* Booking service → Payment service
+* Mobile backend → Analytics ingestion service
+
+**Interview Signal**
+If communication is **internal**, say API keys.
+
+---
+
+## **B) Authorization (Who is allowed to do what)**
+
+The most common model = **RBAC (Role-Based Access Control)**
+
+### Example Roles
+
+| Role              | Can Do                                        |
+| ----------------- | --------------------------------------------- |
+| **Customer**      | Create/view own bookings only                 |
+| **Venue Manager** | Create events & view sales for *their* venues |
+| **Admin**         | Full access                                   |
+
+### Server-side check example:
+
+```
+GET /bookings/987
+→ Check JWT user_id matches booking.user_id
+→ Otherwise: 403 Forbidden
+```
+
+### Interview Sentence
+
+> “Authentication verifies identity. Authorization checks permissions for the requested resource. We’ll use RBAC enforced at the API layer.”
+
+---
+
+# **2. API VERSIONING (How to Evolve APIs Without Breaking Clients)**
+
+Real systems **change**:
+
+* You add new fields
+* You change validation rules
+* Old clients keep calling old formats
+
+So your API must be **backward compatible**.
+
+---
+
+## **Why Versioning Matters**
+
+You **cannot force all clients to upgrade instantly**.
+
+Especially true for:
+
+* Mobile apps (users update slowly)
+* External partners (external API users)
+* Long-lived browser sessions
+
+---
+
+## **Versioning Strategies**
+
+### **A) URL Versioning (Most Common & Interview-Safe)**
+
+Version is part of the endpoint path.
+
+```
+GET /v1/events/123
+GET /v2/events/123
+```
+
+**Pros**
+
+* Very clear
+* Easy to route
+* Easy to test & debug
+
+**Cons**
+
+* Can lead to parallel logic in backend
+
+**Interview Recommendation → Default to this.**
+
+---
+
+### **B) Header-Based Versioning**
+
+Client sends version in `Accept` header:
+
+```
+Accept: application/vnd.example.v2+json
+```
+
+**Pros**
+
+* Cleaner URLs
+
+**Cons**
+
+* Harder to debug manually
+* Less common in interviews unless interviewer pushes it
+
+---
+
+### **C) Deprecation Strategy**
+
+When moving from v1 → v2:
+
+1. Deploy v2
+2. Support both versions for a while
+3. Send deprecation warnings in response headers
+4. Eventually remove v1
+
+**Interview Sentence**
+
+> “We’ll introduce v2 alongside v1 and gradually migrate clients. v1 remains active until traffic to it drops below threshold.”
+
+---
+
+# **How to Say It Smoothly in Interviews**
+
+When you reach the **API Step**, say:
+
+> “We’ll expose public-facing APIs as REST endpoints. Authentication will use JWT tokens, and authorization follows RBAC to enforce access control. To evolve the API safely, we’ll use URL-based versioning (e.g., `/v1/events` → `/v2/events`) so older clients continue working while new clients adopt updated semantics.”
+
+This tells the interviewer:
+✅ You understand **real-world** API lifecycles
+✅ You know how to prevent **breaking clients**
+✅ You think about **security + maintainability**
+
